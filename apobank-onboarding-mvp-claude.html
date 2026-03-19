@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>apoBank · Girokonto für Studierende eröffnen</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #012169;
+    --navy-light: #0a2f7a;
+    --navy-pale: #e8ecf5;
+    --navy-muted: #6e7fa3;
+    --accent: #012169;
+    --black: #111111;
+    --text: #1a1a1a;
+    --text-muted: #555;
+    --border: #d8dce6;
+    --bg: #f7f8fa;
+    --white: #ffffff;
+    --success: #1a7a4a;
+    --error: #c0392b;
+    --radius: 8px;
+    --shadow: 0 2px 16px rgba(1,33,105,0.08);
+    --shadow-lg: 0 8px 40px rgba(1,33,105,0.13);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans Pro', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ─── Header ─────────────────────────────────────── */
+  header {
+    background: var(--white);
+    padding: 0 40px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .apo-logo {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  /* apoBank wordmark rendered as SVG inline */
+  .apo-logo svg { height: 36px; width: auto; }
+
+  .header-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .header-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--navy);
+    letter-spacing: 0.005em;
+    white-space: nowrap;
+  }
+
+  /* ─── Main Layout ─────────────────────────────────── */
+  main {
+    flex: 1;
+    padding: 40px 20px 60px;
+  }
+
+  .step-container {
+    max-width: 1060px;
+    margin: 0 auto;
+    display: none;
+    animation: stepIn 0.32s ease both;
+  }
+  .step-container.active { display: block; }
+
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── Step Header ─────────────────────────────────── */
+  .step-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--navy-pale);
+    color: var(--navy);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .step-badge-dot {
+    width: 6px; height: 6px;
+    background: var(--navy);
+    border-radius: 50%;
+  }
+  .step-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .step-subtitle {
+    font-size: 1rem;
+    color: #111111;
+    font-weight: 400;
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+  /* header block inside a card */
+  .card-header {
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ─── Card ────────────────────────────────────────── */
+  .card {
+    background: var(--white);
+    border: none;
+    border-radius: 12px;
+    padding: 40px 44px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+  .card-section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--navy-muted);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ─── Form Elements ───────────────────────────────── */
+  .field-row {
+    display: grid;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .field-row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .field-row.col-1  { grid-template-columns: 1fr; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+  }
+  label .req { color: var(--navy); margin-left: 2px; }
+  label .hint {
+    font-weight: 400;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    margin-left: 6px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  input[type="number"],
+  select,
+  textarea {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    height: 56px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+    width: 100%;
+    -webkit-appearance: none;
+  }
+  textarea {
+    height: auto;
+    min-height: 80px;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(1,33,105,0.18);
+    outline: none;
+  }
+
+  /* ─── Global focus-visible ring ──────────────────────── */
+  /* Remove default outline for mouse users, keep for keyboard */
+  *:focus { outline: none; }
+  *:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 2px;
+  }
+
+  /* Inputs & selects already show border+shadow on focus, 
+     so suppress the duplicate outline ring for those */
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(1,33,105,0.18);
+  }
+
+  /* Buttons */
+  .btn:focus-visible,
+  .btn-order:focus-visible,
+  .btn-cta:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(1,33,105,0.18);
+  }
+
+  /* Choice cards (account type) */
+  .choice-card:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(1,33,105,0.14);
+  }
+
+  /* Pill options */
+  .pill-option:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 2px;
+  }
+
+  /* Check rows */
+  .check-row:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Toggle switches */
+  .toggle-switch input:focus-visible + .toggle-slider {
+    box-shadow: 0 0 0 3px rgba(1,33,105,0.22);
+  }
+
+  /* Text buttons (add staatsangehörigkeit, studium fields) */
+  button:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Links */
+  a:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* PDF download cards */
+  .pdf-download:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 2px;
+    border-radius: 10px;
+  }
+
+  /* Id options (Jetzt starten / Später fortfahren) */
+  .id-option:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 2px;
+    border-radius: 10px;
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  /* ─── Radio / Check Cards ─────────────────────────── */
+  .choice-grid {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .choice-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+
+  .choice-card {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 20px;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--white);
+  }
+  .choice-card:hover { border-color: var(--navy); background: var(--navy-pale); }
+  .choice-card.selected {
+    border-color: var(--navy);
+    background: var(--navy-pale);
+    box-shadow: 0 0 0 3px rgba(1,33,105,0.10);
+  }
+  .choice-card input[type="radio"] { display: none; }
+  .choice-radio { display: none; }
+  .choice-body { flex: 1; }
+  .choice-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .choice-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .choice-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--navy-pale);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .choice-card.selected .choice-icon { background: rgba(1,33,105,0.15); }
+  .choice-icon svg { width: 22px; height: 22px; color: var(--navy); }
+
+  /* ─── Toggle / Checkbox ───────────────────────────── */
+  .toggle-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--bg);
+  }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-switch {
+    position: relative;
+    width: 40px; height: 22px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: var(--border);
+    border-radius: 22px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    left: 3px; bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  .toggle-switch input:checked + .toggle-slider { background: var(--navy); }
+  .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); }
+  .toggle-label { font-size: 0.92rem; line-height: 1.5; }
+  .toggle-label strong { font-weight: 600; }
+  .toggle-label .sub { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+
+  /* ─── Checkbox ────────────────────────────────────── */
+  .check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    cursor: pointer;
+  }
+  .check-row input[type="checkbox"] { display: none; }
+  .check-box {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .check-row.checked .check-box {
+    background: var(--navy);
+    border-color: var(--navy);
+  }
+  .check-row.checked .check-box::after {
+    content: '';
+    width: 10px; height: 6px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg) translateY(-1px);
+  }
+  .check-text { font-size: 0.9rem; line-height: 1.5; color: var(--text); }
+  .check-text a { color: var(--navy); text-decoration: underline; }
+
+  /* ─── Buttons ─────────────────────────────────────── */
+  .btn-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    gap: 12px;
+  }
+  .btn {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 999px;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .btn-primary {
+    background: var(--navy);
+    color: var(--white);
+    border: 2px solid var(--navy);
+  }
+  .btn-primary:hover { background: var(--navy-light); border-color: var(--navy-light); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(1,33,105,0.22); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--navy);
+    border: 1px solid var(--navy);
+  }
+  .btn-secondary:hover { background: var(--navy-pale); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--navy);
+    border: 1px solid var(--navy);
+    border-radius: 999px;
+    padding: 12px 28px;
+  }
+  .btn-ghost:hover { background: var(--navy-pale); transform: translateY(-1px); }
+  .btn-cta {
+    background: var(--navy);
+    color: var(--white);
+    font-size: 1.05rem;
+    padding: 15px 36px;
+    border-radius: 999px;
+    border: 2px solid var(--navy);
+  }
+  .btn-cta:hover { background: var(--navy-light); border-color: var(--navy-light); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(1,33,105,0.26); }
+  .btn svg { width: 18px; height: 18px; }
+
+  /* ─── Info Box ────────────────────────────────────── */
+  .info-box {
+    background: var(--navy-pale);
+    border-left: 3px solid var(--navy);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    font-size: 0.88rem;
+    color: var(--navy);
+    line-height: 1.5;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .info-box svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ─── Step 1: Welcome ─────────────────────────────── */
+  .welcome-req-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 20px;
+  }
+  .welcome-req-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--bg);
+  }
+  .welcome-req-item:last-child { border-bottom: none; }
+  .welcome-req-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--navy-pale);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .welcome-req-icon svg { width: 20px; height: 20px; color: var(--navy); }
+  .welcome-req-text { flex: 1; padding-top: 2px; }
+  .welcome-req-label { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .welcome-req-sub { font-size: 0.82rem; color: var(--text-muted); }
+
+  .welcome-no-id-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--navy);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 600;
+    margin-top: 4px;
+    cursor: pointer;
+  }
+  .welcome-no-id-link svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .welcome-no-id-link:hover { opacity: 0.75; }
+
+  .welcome-duration-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+  }
+  .welcome-duration-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--navy-pale);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .welcome-duration-icon svg { width: 22px; height: 22px; color: var(--navy); }
+
+  .welcome-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-left: 42px;
+  }
+  .welcome-step-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--bg);
+  }
+  .welcome-step-item:last-child { border-bottom: none; }
+  .welcome-step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .welcome-step-label {
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  /* ─── Unified step card ───────────────────────────── */
+  .step-card {
+    background: var(--white);
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .step-card-header {
+    padding: 36px 44px 28px;
+  }
+  .step-card-header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .step-card-header p {
+    font-size: 0.95rem;
+    color: #111111;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .step-card-body {
+    padding: 0 44px 40px;
+  }
+  /* subsection label inside a card body */
+  .section-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--navy-muted);
+    margin-bottom: 14px;
+    margin-top: 28px;
+  }
+  .section-label:first-child { margin-top: 0; }
+  .info-block { }
+  .info-block-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .info-block-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--navy-pale);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .info-block-icon svg { width: 16px; height: 16px; color: var(--navy); }
+  .info-block-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .info-block-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 14px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding-left: 42px;
+  }
+  .info-block-list li {
+    font-size: 0.92rem;
+    color: #111111;
+    line-height: 1.5;
+    position: relative;
+    padding-left: 14px;
+  }
+  .info-block-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--navy);
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  .info-block-text {
+    font-size: 0.92rem;
+    color: #111111;
+    line-height: 1.5;
+    margin: 0;
+    padding-left: 42px;
+  }
+
+  /* ─── TC Download ─────────────────────────────────── */
+  .pdf-download {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.18s;
+    background: var(--white);
+    margin-bottom: 24px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .pdf-download:hover { border-color: var(--navy); background: var(--navy-pale); }
+  .pdf-icon {
+    width: 44px; height: 44px;
+    background: #fff0f0;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .pdf-icon svg { width: 24px; height: 24px; color: #c0392b; }
+  .pdf-info { flex: 1; }
+  .pdf-name { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .pdf-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+  .pdf-dl { color: var(--navy); font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+  .pdf-dl svg { width: 16px; height: 16px; }
+
+  /* ─── Summary ─────────────────────────────────────── */
+  .summary-section { margin-bottom: 24px; }
+  .summary-section-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--navy-muted);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .summary-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .summary-field { }
+  .summary-key { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; margin-bottom: 2px; }
+  .summary-val { font-size: 0.95rem; color: var(--text); font-weight: 400; }
+  .summary-edit {
+    font-size: 0.8rem;
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: none;
+    display: block;
+    margin-top: 8px;
+    padding: 0;
+  }
+  .summary-edit:hover { text-decoration: underline; }
+
+  .order-box {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 28px 32px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .order-box-text strong { font-size: 1.05rem; font-weight: 700; }
+  .order-box-text p { font-size: 0.88rem; color: rgba(255,255,255,0.65); margin-top: 4px; }
+  .btn-order {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    background: white;
+    color: var(--navy);
+    border: none;
+    border-radius: 999px;
+    padding: 13px 28px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.18s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .btn-order:hover { background: var(--navy-pale); transform: translateY(-1px); }
+  .btn-order svg { width: 18px; height: 18px; }
+
+  /* ─── ID Priming ──────────────────────────────────── */
+  .id-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .id-option {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 20px;
+    cursor: pointer;
+    transition: all 0.18s;
+    text-align: center;
+    background: var(--white);
+  }
+  .id-option:hover { border-color: var(--navy); background: var(--navy-pale); }
+  .id-option.primary { border-color: var(--navy); background: var(--navy); color: white; }
+  .id-option.primary:hover { background: var(--navy-light); }
+  .id-option svg { width: 32px; height: 32px; margin-bottom: 10px; }
+  .id-option.primary svg { color: white; }
+  .id-option-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 5px; }
+  .id-option.primary .id-option-title { color: white; }
+  .id-option-sub { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
+  .id-option.primary .id-option-sub { color: rgba(255,255,255,0.65); }
+
+  /* ─── ID Verification Steps ───────────────────────── */
+  .id-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .id-step {
+    display: flex;
+    gap: 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--bg);
+  }
+  .id-step:last-child { border-bottom: none; }
+  .id-step-num {
+    width: 36px; height: 36px;
+    background: var(--navy);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.88rem;
+    flex-shrink: 0;
+  }
+  .id-step-content { flex: 1; }
+  .id-step-title { font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 4px; }
+  .id-step-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.45; }
+  .id-step-img {
+    width: 100%;
+    max-width: 340px;
+    height: 160px;
+    background: var(--navy-pale);
+    border-radius: 8px;
+    margin-top: 12px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .id-card-mock {
+    width: 220px; height: 138px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.14);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid var(--border);
+  }
+  .id-card-flag { font-size: 1.3rem; }
+  .id-card-title { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .id-card-name { font-size: 0.82rem; font-weight: 700; color: var(--text); }
+  .id-card-num { font-size: 0.7rem; color: var(--text-muted); font-family: monospace; }
+  .id-card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .id-card-exp { font-size: 0.65rem; color: var(--text-muted); }
+  .scan-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .scan-line {
+    position: absolute;
+    left: 24px; right: 24px;
+    height: 2px;
+    background: var(--navy);
+    opacity: 0.7;
+    animation: scan 2s ease-in-out infinite;
+  }
+  @keyframes scan {
+    0%   { top: 20%; }
+    50%  { top: 80%; }
+    100% { top: 20%; }
+  }
+  .scan-corners {
+    position: absolute;
+    inset: 16px;
+  }
+  .scan-corner {
+    position: absolute;
+    width: 18px; height: 18px;
+    border-color: var(--navy);
+    border-style: solid;
+    opacity: 0.8;
+  }
+  .scan-corner.tl { top: 0; left: 0; border-width: 3px 0 0 3px; }
+  .scan-corner.tr { top: 0; right: 0; border-width: 3px 3px 0 0; }
+  .scan-corner.bl { bottom: 0; left: 0; border-width: 0 0 3px 3px; }
+  .scan-corner.br { bottom: 0; right: 0; border-width: 0 3px 3px 0; }
+
+  /* ─── Success State ───────────────────────────────── */
+  .success-screen {
+    text-align: center;
+    padding: 48px 32px;
+  }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: #e6f4ed;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .success-icon svg { width: 36px; height: 36px; color: var(--success); }
+
+  /* ─── Footer ──────────────────────────────────────── */
+  footer {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; }
+  .footer-links a:hover { color: var(--navy); }
+  .footer-secure { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text-muted); }
+  .footer-secure svg { width: 14px; height: 14px; color: var(--success); }
+
+  @media (max-width: 640px) {
+    header { padding: 0 20px; }
+    .progress-bar-wrap { padding: 0 20px; }
+    main { padding: 24px 16px 48px; }
+    .card { padding: 20px; }
+    .welcome-hero { padding: 32px 24px; }
+    .welcome-steps { grid-template-columns: 1fr; }
+    .choice-grid.cols-2 { grid-template-columns: 1fr; }
+    .field-row.cols-2 { grid-template-columns: 1fr; }
+    .field-row.cols-3 { grid-template-columns: 1fr; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .id-options { grid-template-columns: 1fr; }
+    .order-box { flex-direction: column; align-items: flex-start; }
+    footer { padding: 14px 20px; }
+  }
+  /* ─── Two-column form layout ──────────────────────── */
+  .form-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0 48px;
+    align-items: start;
+  }
+  .form-left {
+    position: sticky;
+    top: 96px;
+  }
+  .form-left h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .form-left p {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .form-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .form-right .field-row { margin-bottom: 0; }
+  .form-section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 0;
+  }
+  .form-section-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--navy-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+    margin-top: 8px;
+  }
+  @media (max-width: 860px) {
+    .form-layout { grid-template-columns: 1fr; gap: 24px 0; }
+    .form-left { position: static; }
+  }
+
+  .card-header {
+    padding: 36px 44px 28px;
+    border-bottom: 1px solid var(--border);
+    margin: -40px -44px 28px -44px;
+  }
+  .card-header h1, .card-header .step-title {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: var(--navy) !important;
+    line-height: 1.3;
+    margin-bottom: 8px !important;
+  }
+  .card-header p, .card-header .step-subtitle {
+    font-size: 1rem !important;
+    color: #111111 !important;
+    line-height: 1.5;
+    margin: 0 !important;
+    font-weight: 400 !important;
+  }
+  /* ─── Pill selectors ──────────────────────────────── */
+  .pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pill-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .pill-option:hover { border-color: var(--navy); background: var(--navy-pale); }
+  .pill-option.selected {
+    border-color: var(--navy);
+    background: var(--navy);
+    color: var(--white);
+  }
+  .pill-option input { display: none; }
+  /* ─── Cheat menu ──────────────────────────────────── */
+  .cheat-btn {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: var(--navy-pale);
+    color: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .cheat-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <span class="header-title" onclick="toggleCheatMenu()" style="cursor:pointer; user-select:none;" title="Testmenü öffnen">Girokonto für Studierende eröffnen</span>
+  </div>
+</header>
+
+<!-- Cheat Menu -->
+<div id="cheat-menu" style="display:none; position:fixed; top:68px; left:0; right:0; z-index:200; background:white; border-bottom:1px solid var(--border); box-shadow:0 4px 24px rgba(0,0,0,0.10); padding:16px 40px;">
+  <div style="max-width:1060px; margin:0 auto;">
+    <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--navy-muted); margin-bottom:12px;">🧪 Testmenü — Schnellzugriff auf alle Schritte</div>
+    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+      <button onclick="jumpTo(1)"  class="cheat-btn">1 · Willkommen</button>
+      <button onclick="jumpTo(2)"  class="cheat-btn">2 · Kontomodell</button>
+      <button onclick="jumpTo(3)"  class="cheat-btn">3 · Vertragsbedingungen</button>
+      <button onclick="jumpTo(4)"  class="cheat-btn">4 · Name</button>
+      <button onclick="jumpTo(5)"  class="cheat-btn">5 · Geburtsdaten</button>
+      <button onclick="jumpTo(6)"  class="cheat-btn">6 · Adresse</button>
+      <button onclick="jumpTo(7)"  class="cheat-btn">7 · Kontaktdaten</button>
+      <button onclick="jumpTo(8)"  class="cheat-btn">8 · Studium</button>
+      <button onclick="jumpTo(9)"  class="cheat-btn">9 · Steuer</button>
+      <button onclick="jumpTo(10)" class="cheat-btn">10 · Datenschutz</button>
+      <button onclick="jumpTo(11)" class="cheat-btn">11 · Zusammenfassung</button>
+      <button onclick="jumpTo(12)" class="cheat-btn">12 · ID-Vorbereitung</button>
+      <button onclick="jumpTo(13)" class="cheat-btn">13 · Video-ID</button>
+      <button onclick="jumpTo(14)" class="cheat-btn">14 · Bestätigung</button>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 1 · WILLKOMMEN
+════════════════════════════════════════════════════════ -->
+<div class="step-container active" id="step-1">
+
+  <!-- Einzige Karte -->
+  <div class="card" style="padding: 0; overflow: hidden; border: none;">
+
+    <!-- Titel & Einleitung -->
+    <div style="padding: 44px 44px 32px;">
+      <h1 style="font-size: 20px; font-weight: 600; color: var(--navy); line-height: 1.3; margin-bottom: 8px;">Willkommen zur Kontoeröffnung</h1>
+      <p style="font-size: 1rem; color: #111111; margin-bottom: 0; line-height: 1.5;">Wir freuen uns, dass du dich für die apoBank entschieden hast. Hier sind die wichtigsten Infos zur Kontoeröffnung bei uns.</p>
+    </div>
+
+    <!-- Abschnitt: Du benötigst -->
+    <div style="padding: 0 44px 32px;">
+      <div class="info-block">
+        <div class="info-block-header">
+          <div class="info-block-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14"/><rect x="1" y="6" width="15" height="12" rx="2"/></svg>
+          </div>
+          <span class="info-block-title">Du benötigst</span>
+        </div>
+        <ul class="info-block-list">
+          <li>Webcam und Mikrofon für die Videoidentifikation</li>
+          <li>Deutschen Personalausweis oder Reisepass zur Identitätsprüfung</li>
+        </ul>
+        <a href="#" class="welcome-no-id-link" onclick="return false;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Ich habe keinen deutschen Personalausweis oder Reisepass
+        </a>
+      </div>
+    </div>
+
+    <!-- Abschnitt: Dauer -->
+    <div style="padding: 0 44px 32px;">
+      <div class="info-block">
+        <div class="info-block-header">
+          <div class="info-block-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <span class="info-block-title">Dauer</span>
+        </div>
+        <p class="info-block-text">Die Kontoeröffnung dauert ca. <strong>10–15 Minuten</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Abschnitt: Ablauf -->
+    <div style="padding: 0 44px 44px;">
+      <div class="info-block">
+        <div class="info-block-header">
+          <div class="info-block-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </div>
+          <span class="info-block-title">So läuft die Kontoeröffnung ab</span>
+        </div>
+        <div class="welcome-steps-list">
+          <div class="welcome-step-item">
+            <div class="welcome-step-num">1</div>
+            <div class="welcome-step-label">Angabe deiner persönlichen Daten</div>
+          </div>
+          <div class="welcome-step-item">
+            <div class="welcome-step-num">2</div>
+            <div class="welcome-step-label">Adress- und Kontaktinformationen</div>
+          </div>
+          <div class="welcome-step-item">
+            <div class="welcome-step-num">3</div>
+            <div class="welcome-step-label">Steuerliche Angaben</div>
+          </div>
+          <div class="welcome-step-item">
+            <div class="welcome-step-num">4</div>
+            <div class="welcome-step-label">Zustimmung zu Einwilligungen</div>
+          </div>
+          <div class="welcome-step-item" style="border-bottom:none;">
+            <div class="welcome-step-num">5</div>
+            <div class="welcome-step-label">Videolegitimation zur Identitätsprüfung</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="btn-row" style="justify-content: flex-end;">
+    <button class="btn btn-primary" onclick="goToStep(2)">
+      Jetzt starten
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 2 · KONTOTYP
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-2">
+  <div class="step-card">
+    <div class="step-card-header">
+      <h1>Welches Konto möchtest du eröffnen?</h1>
+      <p></p>
+    </div>
+    <div class="step-card-body">
+      <div class="choice-grid cols-2">
+        <label class="choice-card" id="card-single" tabindex="0" role="radio" onclick="selectChoice('acct-type', 'single', this)" style="flex-direction: column; align-items: flex-start; padding: 24px 20px; gap: 12px;">
+          <input type="radio" name="acct-type" value="single">
+          <div class="choice-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="choice-body">
+            <div class="choice-title">Einzelkonto</div>
+            <div class="choice-desc">Allein von dir verwaltet. Volle Kontrolle über deine Finanzen.</div>
+          </div>
+          <div class="choice-radio"></div>
+        </label>
+        <label class="choice-card" id="card-joint" tabindex="0" role="radio" onclick="selectChoice('acct-type', 'joint', this)" style="flex-direction: column; align-items: flex-start; padding: 24px 20px; gap: 12px;">
+          <input type="radio" name="acct-type" value="joint">
+          <div class="choice-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div class="choice-body">
+            <div class="choice-title">Gemeinschaftskonto</div>
+            <div class="choice-desc">Gemeinsam mit einer weiteren Person geführt. Beide Inhaber müssen ihre Identität verifizieren.</div>
+          </div>
+          <div class="choice-radio"></div>
+        </label>
+      </div>
+      <div class="info-box" id="joint-note" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Beide Kontoinhaber müssen im Gesundheitswesen tätig sein oder dort studieren. Die zweite Person erhält nach Abschluss deines Antrags einen gesonderten Einladungslink per E-Mail.
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(1)">← Zurück</button>
+    <button class="btn btn-primary" onclick="goToStep(3)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 3 · AGB
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-3">
+  <div class="card">
+    <div class="form-layout">
+      <div class="form-left">
+        <h1 id="agb-title">Vertragsbedingungen Einzelkonto</h1>
+      </div>
+      <div class="form-right">
+
+        <p style="font-size: 0.95rem; color: var(--text); line-height: 1.6; margin-bottom: 24px;">Die folgenden Dokumente sind wichtige Vertragsbestandteile unserer Geschäftsbeziehung mit dir. Öffne und speichere diese Dateien und bestätige, dass du den Inhalt akzeptierst.</p>
+
+        <div style="margin-bottom: 24px;">
+          <p style="font-size: 0.82rem; font-weight: 600; color: var(--navy-muted); margin-bottom: 12px;">Enthaltene Dokumente</p>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.92rem; color: var(--text);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Allgemeine Geschäftsbedingungen
+            </li>
+            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.92rem; color: var(--text);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Nutzungs- und Fernabsatzbedingungen
+            </li>
+            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.92rem; color: var(--text);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Preis- und Leistungsverzeichnis
+            </li>
+            <li style="display: flex; align-items: center; gap: 10px; font-size: 0.92rem; color: var(--text);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Informationsbogen für den Einleger
+            </li>
+          </ul>
+        </div>
+
+        <a href="#" onclick="return false;" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 28px; text-decoration: none; width: fit-content;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Dokumente herunterladen (PDF)
+        </a>
+
+        <div>
+          <label class="check-row" id="cr-tc" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" onclick="toggleCheck(this, event)">
+            <input type="checkbox"><div class="check-box"></div>
+            <div class="check-text">Ich akzeptiere die von mir abgespeicherten AGB, Nutzungs- und Fernabsatzbedingungen sowie das Preis- und Leistungsverzeichnis.</div>
+          </label>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(2)">← Zurück</button>
+    <button class="btn btn-primary" onclick="goToStep(4)">Akzeptieren &amp; Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 4 · NAME
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-4">
+  <div class="card">
+    <div class="form-layout">
+      <div class="form-left">
+        <h1>Dein Name</h1>
+        <p>Bitte denke daran, dass alle Angaben mit denen in deinem Ausweisdokument übereinstimmen müssen. Das heißt, dass du z. B. alle deine Vor- und Nachnamen vollständig angeben musst.</p>
+      </div>
+      <div class="form-right">
+        <div class="field">
+          <label>Anrede</label>
+          <div class="pill-group">
+            <label class="pill-option" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectPill(this,'anrede');}" onclick="selectPill(this, 'anrede')"><input type="radio" name="anrede" value="Herr"> Herr</label>
+            <label class="pill-option" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectPill(this,'anrede');}" onclick="selectPill(this, 'anrede')"><input type="radio" name="anrede" value="Frau"> Frau</label>
+            <label class="pill-option" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectPill(this,'anrede');}" onclick="selectPill(this, 'anrede')"><input type="radio" name="anrede" value="Divers"> Divers</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Titel <span class="hint">(optional)</span></label>
+          <div class="pill-group">
+            <label class="pill-option" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePill(this);}" id="pill-prof" onclick="togglePill(this)"><input type="checkbox" name="titel" value="Prof."> Prof.</label>
+          </div>
+        </div>
+        <div class="field-row col-1"><div class="field"><label>Vornamen</label><input type="text" placeholder="z. B. Maria Anna"></div></div>
+        <div class="field-row col-1"><div class="field"><label>Nachname</label><input type="text" placeholder="z. B. Schneider"></div></div>
+        <div class="field-row col-1"><div class="field"><label>Abweichender Geburtsname <span class="hint">(optional)</span></label><input type="text" placeholder="Leer lassen, wenn identisch mit Nachnamen"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(3)">← Zurück</button>
+    <button class="btn btn-primary" onclick="goToStep(5)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 5 · GEBURTSDATEN
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-5">
+  <div class="card">
+    <div class="form-layout">
+      <div class="form-left">
+        <h1>Wann und wo wurdest du geboren?</h1>
+        <p>Diese Angaben werden für die Identitätsprüfung und die gesetzliche Dokumentation benötigt.</p>
+      </div>
+      <div class="form-right">
+        <div class="field-row col-1">
+          <div class="field"><label>Geburtsdatum</label><input type="date" max="2007-01-01"></div>
+        </div>
+        <div class="field-row col-1">
+          <div class="field"><label>Geburtsort</label><input type="text" placeholder="Stadt"></div>
+        </div>
+        <div class="field"><label>Familienstand</label>
+          <select name="familienstand">
+            <option value="">Bitte wählen</option>
+            <option>Ledig</option>
+            <option>Verheiratet</option>
+            <option>Eingetragene Lebenspartnerschaft</option>
+            <option>Getrennt lebend</option>
+            <option>Geschieden</option>
+            <option>Verwitwet</option>
+          </select>
+        </div>
+        <div class="field" id="staatsangehoerigkeit-group">
+          <label>Staatsangehörigkeit</label>
+          <div id="staatsangehoerigkeit-fields" style="display: flex; flex-direction: column; gap: 10px;"></div>
+          <button type="button" onclick="addStaatsangehoerigkeit()" id="add-staatsang-btn" style="margin-top: 8px; background: none; border: none; padding: 0; font-family: inherit; font-size: 0.85rem; color: var(--navy); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; text-align: left; width: fit-content;">+ Weitere Staatsangehörigkeit hinzufügen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(4)">← Zurück</button>
+    <button class="btn btn-primary" onclick="goToStep(6)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 6 · ADRESSE
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-6">
+  <div class="card">
+    <div class="form-layout">
+      <div class="form-left">
+        <h1>Wie lautet deine Meldeadresse?</h1>
+        <p>Bitte gib hier deine Meldeadresse an, so wie sie auch in deinem Ausweisdokument steht. Dies muss nicht unbedingt dein aktueller Wohnort sein.</p>
+      </div>
+      <div class="form-right">
+        <div style="display: grid; grid-template-columns: 3fr 1fr; gap: 12px;">
+          <div class="field"><label>Straße</label><input type="text" placeholder="z. B. Musterstraße"></div>
+          <div class="field"><label>Nr.</label><input type="text" placeholder="12a"></div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 12px;">
+          <div class="field"><label>Postleitzahl</label><input type="text" placeholder="80331"></div>
+          <div class="field"><label>Ort</label><input type="text" placeholder="z. B. München"></div>
+        </div>
+        <div class="field"><label>Adresszusatz <span class="hint">(optional)</span></label><input type="text" placeholder="Wohnungsnr., Etage etc."></div>
+        <div class="field"><label>Land</label>
+          <select><option value="">Bitte wählen</option><option selected>Deutschland</option><option>Österreich</option><option>Schweiz</option><option>Frankreich</option><option>Niederlande</option><option>Sonstiges EU-Land</option></select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(5)">← Zurück</button>
+    <button class="btn btn-primary" onclick="goToStep(7)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 7 · KONTAKTDATEN
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-7">
+  <div class="card">
+    <div class="form-layout">
+      <div class="form-left">
+        <h1>Wie lauten deine Kontaktdaten?</h1>
+        <p>Bitte gib deine E-Mail-Adresse und deine Mobilfunknummer an.</p>
+      </div>
+      <div class="form-right">
+        <div class="field"><label>E-Mail-Adresse</label><input type="email" placeholder="ihre@email.de"></div>
+        <div class="field"><label>Mobilnummer</label><input type="tel" placeholder="+49 171 234 5678"></div>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-top: 4px;">Deine Mobilfunknummer benötigen wir für die Identitätsprüfung. An diese Nummer senden wir dir eine PIN per SMS.</p>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(6)">← Zurück</button>
+    <button class="btn btn-primary" onclick="goToStep(8)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 8 · STUDIUMSANGABEN
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-8">
+  <div class="card">
+    <div class="form-layout">
+      <div class="form-left">
+        <h1>Was und wo studierst du?</h1>
+        <p>Als auf das Gesundheitswesen spezialisierte Bank müssen wir deine Immatrikulation bestätigen. Alle Felder sind Pflichtangaben.</p>
+      </div>
+      <div class="form-right">
+        <label class="check-row" id="cr-student" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" onclick="toggleStudiumFields(this, event)" style="margin-bottom: 16px;">
+          <input type="checkbox"><div class="check-box"></div>
+          <div class="check-text">Ich bestätige, dass ich Student*in der akademischen Heilberufe bin.</div>
+        </label>
+        <div id="studium-fields" style="display: flex; flex-direction: column; gap: 16px; opacity: 0.4; pointer-events: none;">
+          <div class="field"><label>Studiengang</label>
+            <select id="studiengang-select" onchange="var h=document.getElementById('hochschule-input');h.disabled=this.value==='';h.style.opacity=this.value===''?'0.4':'1';h.style.cursor=this.value===''?'not-allowed':'';">
+              <option value="">Bitte Studiengang wählen</option>
+              <optgroup label="Medizin"><option>Humanmedizin</option><option>Zahnmedizin</option><option>Tiermedizin / Veterinärmedizin</option><option>Pharmazie</option></optgroup>
+              <optgroup label="Gesundheitswissenschaften"><option>Pflegewissenschaft</option><option>Physiotherapie</option><option>Ergotherapie</option><option>Medizintechnik</option><option>Public Health</option><option>Gesundheitsmanagement</option></optgroup>
+              <optgroup label="Verwandte Studiengänge"><option>Biomedizin</option><option>Psychologie (klinischer Schwerpunkt)</option><option>Medizinische Informatik</option><option>Sonstiger gesundheitsbezogener Studiengang</option></optgroup>
+            </select>
+          </div>
+          <div class="field"><label>Hochschule / Bildungseinrichtung</label>
+            <select id="hochschule-input" disabled style="opacity: 0.4; cursor: not-allowed;">
+              <option value="">Bitte Hochschule wählen</option>
+              <optgroup label="Bayern">
+                <option>Ludwig-Maximilians-Universität München</option>
+                <option>Technische Universität München</option>
+                <option>Friedrich-Alexander-Universität Erlangen-Nürnberg</option>
+                <option>Julius-Maximilians-Universität Würzburg</option>
+                <option>Universität Regensburg</option>
+                <option>Universität Augsburg</option>
+              </optgroup>
+              <optgroup label="Baden-Württemberg">
+                <option>Ruprecht-Karls-Universität Heidelberg</option>
+                <option>Universität Freiburg</option>
+                <option>Eberhard Karls Universität Tübingen</option>
+                <option>Universität Ulm</option>
+              </optgroup>
+              <optgroup label="Nordrhein-Westfalen">
+                <option>Westfälische Wilhelms-Universität Münster</option>
+                <option>Heinrich-Heine-Universität Düsseldorf</option>
+                <option>Universität Köln</option>
+                <option>Ruhr-Universität Bochum</option>
+                <option>RWTH Aachen</option>
+              </optgroup>
+              <optgroup label="Hessen">
+                <option>Goethe-Universität Frankfurt</option>
+                <option>Philipps-Universität Marburg</option>
+                <option>Justus-Liebig-Universität Gießen</option>
+              </optgroup>
+              <optgroup label="Niedersachsen">
+                <option>Medizinische Hochschule Hannover</option>
+                <option>Georg-August-Universität Göttingen</option>
+              </optgroup>
+              <optgroup label="Berlin &amp; Brandenburg">
+                <option>Charité – Universitätsmedizin Berlin</option>
+                <option>Freie Universität Berlin</option>
+                <option>Humboldt-Universität zu Berlin</option>
+              </optgroup>
+              <optgroup label="Hamburg &amp; Schleswig-Holstein">
+                <option>Universität Hamburg</option>
+                <option>Christian-Albrechts-Universität zu Kiel</option>
+                <option>Universität zu Lübeck</option>
+              </optgroup>
+              <optgroup label="Sachsen &amp; Thüringen">
+                <option>Universität Leipzig</option>
+                <option>Friedrich-Schiller-Universität Jena</option>
+                <option>Martin-Luther-Universität Halle-Wittenberg</option>
+              </optgroup>
+              <optgroup label="Weitere">
+                <option>Sonstige Hochschule</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="field"><label>Aktuelles Fachsemester</label><input type="number" min="1" max="30" placeholder="z. B. 4"></div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="field"><label>Studienbeginn</label><input type="date"></div>
+            <div class="field"><label>Voraussichtliches Studienende</label><input type="date"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(7)">← Zurück</button>
+    <button class="btn btn-primary" onclick="goToStep(9)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 9 · STEUERLICHE ANGABEN
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-9">
+  <div class="card">
+    <div class="form-layout">
+      <div class="form-left">
+        <h1>Steuerliche Informationen</h1>
+        <p>Gesetzlich vorgeschrieben gemäß dem Common Reporting Standard (CRS) und den FATCA-Regelungen. Alle Angaben werden vertraulich behandelt.</p>
+      </div>
+      <div class="form-right">
+        <div class="field-row col-1"><div class="field"><label>Steuerliche Identifikationsnummer (Steuer-IdNr.)</label><input type="text" placeholder="11-stellige Nummer, z. B. 12 345 678 901" maxlength="14"></div></div>
+        <div class="field-row col-1"><div class="field"><label>Steuerlicher Ansässigkeitsstaat</label>
+          <select><option>Deutschland</option><option>Österreich</option><option>Schweiz</option><option>Sonstiger EU-Mitgliedsstaat</option><option>Nicht-EU-Staat</option></select>
+        </div></div>
+        <div class="form-section-divider"></div>
+        <div class="info-box" style="margin-bottom:12px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Gemäß FATCA sind wir verpflichtet, alle Kunden nach ihrem US-Steuerstatus zu befragen.
+        </div>
+        <p style="font-size:0.9rem;font-weight:600;margin-bottom:10px;">Bist du im steuerrechtlichen Sinne eine US-Person?</p>
+        <div class="choice-grid cols-2" style="margin-bottom:12px;">
+          <label class="choice-card" tabindex="0" style="padding:12px;" onclick="selectChoice('us-tax','nein',this);document.getElementById('us-tax-details').style.display='none'">
+            <input type="radio" name="us-tax" value="nein">
+            <div class="choice-body"><div class="choice-title" style="font-size:0.9rem;">Nein</div><div class="choice-desc">Ich bin weder US-Staatsbürger noch US-steuerpflichtig</div></div>
+            <div class="choice-radio"></div>
+          </label>
+          <label class="choice-card" tabindex="0" style="padding:12px;" onclick="selectChoice('us-tax','ja',this);document.getElementById('us-tax-details').style.display='block'">
+            <input type="radio" name="us-tax" value="ja">
+            <div class="choice-body"><div class="choice-title" style="font-size:0.9rem;">Ja</div><div class="choice-desc">Ich bin US-Staatsbürger, Green-Card-Inhaber oder US-Steuerpflichtiger</div></div>
+            <div class="choice-radio"></div>
+          </label>
+        </div>
+        <div id="us-tax-details" style="display:none;">
+          <div class="field-row col-1"><div class="field"><label>US-Sozialversicherungsnummer (SSN) oder ITIN</label><input type="text" placeholder="z. B. 123-45-6789"></div></div>
+        </div>
+        <div class="form-section-divider"></div>
+        <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:10px;line-height:1.5;">Gemäß EU-Regelungen zur Geldwäschebekämpfung bestätigen wir, dass das Konto ausschließlich für deinen persönlichen Gebrauch eröffnet wird.</p>
+        <label class="check-row" id="cr-own-interest" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" onclick="toggleCheck(this, event)">
+          <input type="checkbox"><div class="check-box"></div>
+          <div class="check-text"><strong>Ich bestätige</strong>, dass ich ausschließlich auf eigene Rechnung und im eigenen wirtschaftlichen Interesse handle.</div>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(8)">← Zurück</button>
+    <button class="btn btn-primary" onclick="goToStep(10)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 10 · DATENSCHUTZEINWILLIGUNGEN
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-10">
+  <div class="card">
+    <div class="form-layout">
+      <div class="form-left">
+        <h1>Einwilligung zur Nutzung deiner Daten</h1>
+        <p>Bitte prüfe, wie wir deine Daten verwenden. Einige Einwilligungen sind erforderlich, andere sind freiwillig und können jederzeit widerrufen werden.</p>
+      </div>
+      <div class="form-right">
+        <p class="form-section-label">Erforderliche Einwilligungen</p>
+        <div class="toggle-row">
+          <div><label class="toggle-switch"><input type="checkbox" checked disabled><span class="toggle-slider"></span></label></div>
+          <div class="toggle-label"><strong>Vertragserfüllung</strong><div class="sub">Die Verarbeitung deiner Daten zur Eröffnung und Führung deines Kontos ist erforderlich und kann nicht widerrufen werden. (Art. 6 Abs. 1 lit. b DSGVO)</div></div>
+        </div>
+        <div class="toggle-row">
+          <div><label class="toggle-switch"><input type="checkbox" checked disabled><span class="toggle-slider"></span></label></div>
+          <div class="toggle-label"><strong>Gesetzliche Verpflichtungen</strong><div class="sub">Wir sind gesetzlich verpflichtet, bestimmte Daten für die GwG-, FATCA- und CRS-Meldepflichten zu verarbeiten. (Art. 6 Abs. 1 lit. c DSGVO)</div></div>
+        </div>
+        <div class="form-section-divider"></div>
+        <p class="form-section-label">Freiwillige Einwilligungen</p>
+        <div class="toggle-row">
+          <div><label class="toggle-switch"><input type="checkbox" id="toggle-marketing"><span class="toggle-slider"></span></label></div>
+          <div class="toggle-label"><strong>Marketing &amp; Produktinformationen</strong><div class="sub">Erhalte personalisierte Angebote, Produktneuigkeiten und Nachrichten von apoBank per E-Mail. Der Widerruf ist jederzeit möglich.</div></div>
+        </div>
+        <div class="toggle-row">
+          <div><label class="toggle-switch"><input type="checkbox" id="toggle-analytics"><span class="toggle-slider"></span></label></div>
+          <div class="toggle-label"><strong>Nutzungsanalyse</strong><div class="sub">Hilf uns, unsere Dienste zu verbessern, indem du anonyme Nutzungsdaten aus unserer App und dem Online-Banking teilen.</div></div>
+        </div>
+        <div class="toggle-row">
+          <div><label class="toggle-switch"><input type="checkbox" id="toggle-partners"><span class="toggle-slider"></span></label></div>
+          <div class="toggle-label"><strong>Angebote von Gesundheitspartnern</strong><div class="sub">Erlaube ausgewählten Partnern aus dem Gesundheitswesen, dich mit exklusiven Studierendenrabatten und Angeboten zu kontaktieren.</div></div>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text-muted);line-height:1.5;margin-top:12px;">Freiwillige Einwilligungen kannst du jederzeit in deinen Kontoeinstellungen verwalten oder widerrufen. Lies unsere vollständige <a href="#" style="color:var(--navy);">Datenschutzerklärung</a>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(9)">← Zurück</button>
+    <button class="btn btn-primary" onclick="goToStep(11)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 11 · ZUSAMMENFASSUNG
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-11">
+  <div class="step-card">
+    <div class="step-card-header">
+      <h1>Zusammenfassung deiner Angaben</h1>
+      <p>Bitte überprüf alle Angaben sorgfältig, bevor du den Antrag einreichst. Klicke auf einen Abschnitt, um Änderungen vorzunehmen.</p>
+    </div>
+    <div class="step-card-body">
+      <div class="summary-section">
+        <div class="summary-section-title">Kontotyp</div>
+        <div class="summary-grid"><div class="summary-field"><div class="summary-key">Kontotyp</div><div class="summary-val">Einzelkonto</div></div></div>
+        <button class="summary-edit" onclick="goToStep(2)">✏ Kontotyp bearbeiten</button>
+      </div>
+      <div class="summary-section">
+        <div class="summary-section-title">Persönliche Daten</div>
+        <div class="summary-grid">
+          <div class="summary-field"><div class="summary-key">Vollständiger Name</div><div class="summary-val">Frau Maria Schneider</div></div>
+          <div class="summary-field"><div class="summary-key">Geburtsdatum</div><div class="summary-val">14. März 2001</div></div>
+          <div class="summary-field"><div class="summary-key">Geburtsort</div><div class="summary-val">München, Deutschland</div></div>
+          <div class="summary-field"><div class="summary-key">Staatsangehörigkeit</div><div class="summary-val">Deutsch</div></div>
+          <div class="summary-field"><div class="summary-key">Familienstand</div><div class="summary-val">Ledig</div></div>
+        </div>
+        <button class="summary-edit" onclick="goToStep(4)">✏ Persönliche Daten bearbeiten</button>
+      </div>
+      <div class="summary-section">
+        <div class="summary-section-title">Adresse &amp; Kontakt</div>
+        <div class="summary-grid">
+          <div class="summary-field"><div class="summary-key">Adresse</div><div class="summary-val">Musterstraße 12a, 80331 München</div></div>
+          <div class="summary-field"><div class="summary-key">E-Mail</div><div class="summary-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="deb3bfacb7bff0adbdb6b0bbb7babbac9eb2b3abf0babb">[email&#160;protected]</a></div></div>
+          <div class="summary-field"><div class="summary-key">Mobiltelefon</div><div class="summary-val">+49 171 234 5678</div></div>
+        </div>
+        <button class="summary-edit" onclick="goToStep(6)">✏ Adresse &amp; Kontakt bearbeiten</button>
+      </div>
+      <div class="summary-section">
+        <div class="summary-section-title">Studiumsangaben</div>
+        <div class="summary-grid">
+          <div class="summary-field"><div class="summary-key">Hochschule</div><div class="summary-val">LMU München</div></div>
+          <div class="summary-field"><div class="summary-key">Studiengang</div><div class="summary-val">Humanmedizin</div></div>
+          <div class="summary-field"><div class="summary-key">Abschluss</div><div class="summary-val">Staatsexamen</div></div>
+          <div class="summary-field"><div class="summary-key">Aktuelles Semester</div><div class="summary-val">4. Semester</div></div>
+          <div class="summary-field"><div class="summary-key">Studienzeitraum</div><div class="summary-val">Okt. 2023 – Sep. 2029</div></div>
+          <div class="summary-field"><div class="summary-key">Matrikelnummer</div><div class="summary-val">12345678</div></div>
+        </div>
+        <button class="summary-edit" onclick="goToStep(8)">✏ Studiumsangaben bearbeiten</button>
+      </div>
+      <div class="summary-section">
+        <div class="summary-section-title">Steuerliche Angaben</div>
+        <div class="summary-grid">
+          <div class="summary-field"><div class="summary-key">Steuer-IdNr.</div><div class="summary-val">12 345 678 901</div></div>
+          <div class="summary-field"><div class="summary-key">US-Steuerstatus</div><div class="summary-val">Keine US-Person</div></div>
+          <div class="summary-field"><div class="summary-key">Eigenes wirtschaftliches Interesse</div><div class="summary-val">Bestätigt ✓</div></div>
+        </div>
+        <button class="summary-edit" onclick="goToStep(9)">✏ Steuerliche Angaben bearbeiten</button>
+      </div>
+      <div class="order-box" style="margin:28px 0 0;">
+        <div class="order-box-text">
+          <strong>Alles korrekt?</strong>
+          <p>Mit dem Absenden bestätigst du, dass alle Angaben wahrheitsgemäß und vollständig sind.</p>
+        </div>
+        <button class="btn-order" onclick="goToStep(12)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Antrag einreichen
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(10)">← Zurück</button>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 12 · VORBEREITUNG IDENTITÄTSPRÜFUNG
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-12">
+  <div class="card" style="text-align:center;">
+    <div class="card-header" style="text-align:left;">
+      <h1 class="step-title">Fast geschafft — Identitätsprüfung</h1>
+      <p class="step-subtitle">dein Antrag wurde gespeichert. Jetzt müssen wir deine Identität bestätigen. Dies erfolgt über unseren Partner <strong>IDnow</strong> und dauert ca. 3–5 Minuten.</p>
+    </div>
+    <div style="width:64px;height:64px;background:var(--navy-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+    </div>
+    <p style="font-weight:700;font-size:1rem;color:var(--navy);margin-bottom:8px;">Was du benötigst</p>
+    <p style="font-size:0.9rem;color:var(--text-muted);line-height:1.6;max-width:380px;margin:0 auto 24px;">Einen gültigen <strong>Personalausweis oder Reisepass</strong>, deine <strong>Immatrikulationsbescheinigung</strong> (als PDF oder Foto) sowie Zugriff auf die Kamera deines Smartphones.</p>
+    <div class="id-options" style="max-width:400px;margin:0 auto 24px;">
+      <div class="id-option primary" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToStep(13);}" onclick="goToStep(13)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;display:block;"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        <div class="id-option-title">Jetzt starten</div>
+        <div class="id-option-sub">Video-Identifizierung beginnen</div>
+      </div>
+      <div class="id-option" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sendEmailLink();}" onclick="sendEmailLink()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2" style="margin:0 auto;display:block;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <div class="id-option-title">Später fortfahren</div>
+        <div class="id-option-sub">Sicheren Link per E-Mail zusenden</div>
+      </div>
+    </div>
+    <div id="email-sent-msg" style="display:none;background:var(--navy-pale);border-radius:8px;padding:14px 18px;font-size:0.88rem;color:var(--navy);">
+      ✓ Ein Verifizierungslink wurde an <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="355854475c541b46565d5b505c515047755958401b5150">[email&#160;protected]</a></strong> gesendet. Der Link ist 7 Tage gültig.
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(11)">← Zurück zur Zusammenfassung</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 13 · IDENTITÄTSPRÜFUNG
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-13">
+  <div class="card">
+    <div class="card-header">
+      <h1 class="step-title">Video-Identifizierung</h1>
+      <p class="step-subtitle">Bereitgestellt von <strong>IDnow</strong> – einem regulierten eID-Dienstleister. deine Daten werden sicher in Deutschland verarbeitet.</p>
+    </div>
+    <div class="info-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Dieser Vorgang wird live mit einem geschulten Mitarbeiter per Videoanruf durchgeführt. Die gesamte Sitzung ist verschlüsselt und entspricht den EU-eIDAS-Anforderungen.
+    </div>
+    <div class="card-section-title">Ablauf der Identifizierung – Beispiel</div>
+    <div class="id-flow">
+      <div class="id-step"><div class="id-step-num">1</div><div class="id-step-content"><div class="id-step-title">Ausweisdokument bereithalten</div><div class="id-step-desc">Halte deinen gültigen Personalausweis oder Reisepass bereit. Stelle sicher, dass das Dokument nicht abgelaufen ist und die Lichtbildseite gut sichtbar ist.</div></div></div>
+      <div class="id-step"><div class="id-step-num">2</div><div class="id-step-content"><div class="id-step-title">Videoanruf starten</div><div class="id-step-desc">Ein IDnow-Mitarbeiter verbindet sich per Live-Video mit dir. Durchschnittliche Wartezeit: unter 2 Minuten. Der Anruf ist auf Deutsch und Englisch möglich.</div></div></div>
+      <div class="id-step">
+        <div class="id-step-num">3</div>
+        <div class="id-step-content">
+          <div class="id-step-title">Ausweis in die Kamera halten</div>
+          <div class="id-step-desc">Du wirst gebeten, Ihr Ausweisdokument vor die Kamera zu halten. Der Mitarbeiter scannt beide Seiten des Dokuments.</div>
+          <div class="id-step-img">
+            <div class="id-card-mock">
+              <div><div class="id-card-flag">🇩🇪</div><div class="id-card-title">Personalausweis · Identity Card</div></div>
+              <div><div class="id-card-name">SCHNEIDER, MARIA</div><div class="id-card-num">L01X00T475</div></div>
+              <div class="id-card-bottom"><div class="id-card-exp">Gültig bis: 14.03.2031</div><div style="font-size:0.6rem;color:var(--text-muted);">D&lt;&lt;SCHNEIDER&lt;&lt;MARIA&lt;&lt;&lt;</div></div>
+            </div>
+            <div class="scan-overlay">
+              <div class="scan-corners"><div class="scan-corner tl"></div><div class="scan-corner tr"></div><div class="scan-corner bl"></div><div class="scan-corner br"></div></div>
+              <div class="scan-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="id-step"><div class="id-step-num">4</div><div class="id-step-content"><div class="id-step-title">Live-Verifizierung &amp; Liveness-Check</div><div class="id-step-desc">Der Mitarbeiter bittet dich, den Ausweis kurz zu drehen und einen kurzen Liveness-Check durchzuführen (z. B. den Kopf leicht zu drehen), um zu bestätigen, dass du der Ausweisinhaber sind.</div></div></div>
+      <div class="id-step"><div class="id-step-num">5</div><div class="id-step-content"><div class="id-step-title">Immatrikulationsbescheinigung hochladen</div><div class="id-step-desc">Nach dem Videoanruf wirst du aufgefordert, deine aktuelle Immatrikulationsbescheinigung als Nachweis deines Gesundheitsstudiums hochzuladen.</div></div></div>
+      <div class="id-step"><div class="id-step-num">6</div><div class="id-step-content"><div class="id-step-title">Identifizierung abgeschlossen</div><div class="id-step-desc">Du erhältst innerhalb weniger Minuten eine Bestätigungs-E-Mail. dein Konto wird nach Prüfung durch unser Team innerhalb von 1–2 Werktagen aktiviert.</div></div></div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goToStep(12)">← Zurück</button>
+    <button class="btn btn-cta" onclick="goToStep(14)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+      Video-Identifizierung starten
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCHRITT 14 · BESTÄTIGUNG
+════════════════════════════════════════════════════════ -->
+<div class="step-container" id="step-14">
+  <div class="card success-screen">
+    <div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h1 class="step-title" style="margin-bottom:8px;">Antrag erfolgreich eingereicht!</h1>
+    <p class="step-subtitle" style="margin-bottom:24px;">deine Identitätsprüfung wurde erfolgreich gestartet. Du erhältst eine E-Mail an <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5a8a4b7aca4ebb6a6adaba0aca1a0b785a9a8b0eba1a0">[email&#160;protected]</a></strong>, sobald dein Konto aktiviert wurde.</p>
+    <div style="background:var(--bg);border-radius:10px;padding:20px 24px;text-align:left;font-size:0.88rem;color:var(--text-muted);line-height:1.7;margin-bottom:24px;">
+      <strong style="color:var(--text);display:block;margin-bottom:6px;">Wie geht es weiter?</strong>
+      ① Unser Team prüft das Ergebnis deiner Identifizierung<br>
+      ② deine Immatrikulationsbescheinigung wird geprüft<br>
+      ③ dein apoBank-Konto wird aktiviert (1–2 Werktage)<br>
+      ④ Du erhältst deine IBAN und können mit dem Banking beginnen
+    </div>
+    <p style="font-size:0.85rem;color:var(--text-muted);">Fragen? Schreib uns an <a href="/cdn-cgi/l/email-protection#2d5e585d5d425f596d4c5d424f4c4346034948" style="color:var(--navy);"><span class="__cf_email__" data-cfemail="96e5e3e6e6f9e4e2d6f7e6f9f4f7f8fdb8f2f3">[email&#160;protected]</span></a> oder rufen Sie an: <strong>0800 123 456 78</strong>.</p>
+  </div>
+</div>
+
+</main>
+
+<script>
+  let currentStep = 1;
+
+  function goToStep(n) {
+    var prev = document.getElementById('step-' + currentStep);
+    if (prev) prev.classList.remove('active');
+    currentStep = n;
+    var next = document.getElementById('step-' + currentStep);
+    if (next) next.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function addStaatsangehoerigkeit() {
+    var container = document.getElementById('staatsangehoerigkeit-fields');
+    var isFirst = container.children.length === 0;
+    var wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display:flex;align-items:center;gap:8px;';
+    var select = document.createElement('select');
+    select.name = 'staatsangehoerigkeit[]';
+    select.style.flex = '1';
+    select.innerHTML = '<option value="">Bitte wählen</option><option>Deutsch</option><option>Österreichisch</option><option>Schweizerisch</option><option>Französisch</option><option>Britisch</option><option>Amerikanisch</option><option>Sonstige</option>';
+    wrapper.appendChild(select);
+    if (!isFirst) {
+      var removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.textContent = 'Entfernen';
+      removeBtn.style.cssText = 'background:none;border:none;padding:0;font-family:inherit;font-size:0.82rem;color:var(--text-muted);cursor:pointer;text-decoration:underline;text-underline-offset:2px;white-space:nowrap;flex-shrink:0;';
+      removeBtn.onclick = function() {
+        wrapper.remove();
+        updateAddBtn();
+      };
+      wrapper.appendChild(removeBtn);
+    }
+    container.appendChild(wrapper);
+    updateAddBtn();
+  }
+
+  function updateAddBtn() {
+    var container = document.getElementById('staatsangehoerigkeit-fields');
+    var btn = document.getElementById('add-staatsang-btn');
+    if (!btn) return;
+    btn.style.display = (container && container.children.length >= 3) ? 'none' : 'inline';
+  }
+
+  // Init first staatsangehörigkeit row
+  document.addEventListener('DOMContentLoaded', function() {
+    addStaatsangehoerigkeit();
+  });
+
+  function selectPill(el, name) {
+    var group = el.closest('.pill-group');
+    var pills = group.querySelectorAll('.pill-option');
+    for (var i = 0; i < pills.length; i++) {
+      pills[i].classList.remove('selected');
+    }
+    el.classList.add('selected');
+  }
+
+  function togglePill(el) {
+    el.classList.toggle('selected');
+    var cb = el.querySelector('input[type="checkbox"]');
+    if (cb) cb.checked = el.classList.contains('selected');
+  }
+
+  function toggleCheatMenu() {
+    var m = document.getElementById('cheat-menu');
+    if (m) m.style.display = m.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function jumpTo(n) {
+    document.getElementById('cheat-menu').style.display = 'none';
+    goToStep(n);
+  }
+
+  // Keyboard support for choice-cards (Enter/Space activates)
+  document.addEventListener('keydown', function(e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('choice-card')) {
+      e.preventDefault();
+      e.target.click();
+    }
+  });
+
+  function selectChoice(name, val, el) {
+    var radios = document.querySelectorAll('[name="' + name + '"]');
+    for (var i = 0; i < radios.length; i++) {
+      radios[i].closest('.choice-card').classList.remove('selected');
+    }
+    el.classList.add('selected');
+    if (name === 'acct-type') {
+      var note = document.getElementById('joint-note');
+      if (note) note.style.display = (val === 'joint') ? 'flex' : 'none';
+      var agbTitle = document.getElementById('agb-title');
+      if (agbTitle) agbTitle.textContent = val === 'joint'
+        ? 'Vertragsbedingungen Gemeinschaftskonto'
+        : 'Vertragsbedingungen Einzelkonto';
+    }
+  }
+
+  function toggleStudiumFields(el, e) {
+    if (e) e.preventDefault();
+    el.classList.toggle('checked');
+    var cb = el.querySelector('input[type="checkbox"]');
+    if (cb) cb.checked = el.classList.contains('checked');
+    var fields = document.getElementById('studium-fields');
+    if (fields) {
+      var enabled = el.classList.contains('checked');
+      fields.style.opacity = enabled ? '1' : '0.4';
+      fields.style.pointerEvents = enabled ? '' : 'none';
+      // also reset hochschule if unchecked
+      if (!enabled) {
+        var sg = document.getElementById('studiengang-select');
+        var hi = document.getElementById('hochschule-input');
+        if (sg) sg.value = '';
+        if (hi) { hi.disabled = true; hi.style.opacity = '0.4'; hi.value = ''; }
+      }
+    }
+  }
+
+  function toggleCheck(el, e) {
+    if (e) e.preventDefault();
+    el.classList.toggle('checked');
+    var cb = el.querySelector('input[type="checkbox"]');
+    if (cb) cb.checked = el.classList.contains('checked');
+  }
+
+  function sendEmailLink() {
+    var msg = document.getElementById('email-sent-msg');
+    if (msg) msg.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
