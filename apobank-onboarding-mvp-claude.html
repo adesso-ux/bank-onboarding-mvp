@@ -1099,6 +1099,38 @@
     transition: all 0.12s;
   }
   .cheat-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
+  /* ─── Accordion ───────────────────────────────────── */
+  .accordion { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--white); }
+  .accordion-item { border-bottom: 1px solid var(--border); }
+  .accordion-item:last-child { border-bottom: none; }
+  .accordion-trigger {
+    width: 100%;
+    background: none;
+    border: none;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.14s;
+    gap: 12px;
+  }
+  .accordion-trigger:hover { background: var(--bg); }
+  .accordion-trigger svg { width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.2s; color: var(--navy-muted); }
+  .accordion-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
+  .accordion-panel {
+    display: none;
+    padding: 0 18px 16px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .accordion-panel.open { display: block; }
 </style>
 </head>
 <body>
@@ -1609,40 +1641,63 @@
      SCHRITT 10 · DATENSCHUTZEINWILLIGUNGEN
 ════════════════════════════════════════════════════════ -->
 <div class="step-container" id="step-10">
-  <div class="card">
-    <div class="form-layout">
-      <div class="form-left">
-        <h1>Einwilligung zur Nutzung deiner Daten</h1>
-        <p>Bitte prüfe, wie wir deine Daten verwenden. Einige Einwilligungen sind erforderlich, andere sind freiwillig und können jederzeit widerrufen werden.</p>
-      </div>
-      <div class="form-right">
-        <p class="form-section-label">Erforderliche Einwilligungen</p>
-        <div class="toggle-row">
-          <div><label class="toggle-switch"><input type="checkbox" checked disabled><span class="toggle-slider"></span></label></div>
-          <div class="toggle-label"><strong>Vertragserfüllung</strong><div class="sub">Die Verarbeitung deiner Daten zur Eröffnung und Führung deines Kontos ist erforderlich und kann nicht widerrufen werden. (Art. 6 Abs. 1 lit. b DSGVO)</div></div>
+
+  <h1 class="step-title" style="margin-bottom: 8px; font-size: 32px;">Einwilligung zur Nutzung deiner Daten</h1>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 28px;">
+
+    <div>
+      <p style="font-size: 0.95rem; color: var(--text); line-height: 1.7;">Unser Kernanliegen ist es, Sie exzellent zu betreuen, individuell und mit der Expertise unserer Kundenberaterinnen und Kundenberater. Die Betreuung soll sich nach Ihren persönlichen Zielen und Wünschen richten. Mit Ihren Einwilligungen ermöglichen Sie es uns und unseren Partnern Ihren Bedarf zu analysieren und Ihnen genau die Angebote zukommen zu lassen, die für Sie relevant sind.</p>
+    </div>
+
+    <div>
+      <div class="accordion">
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" aria-expanded="false" onclick="toggleAccordion(this)">
+            <span>Informationen zu Produkten, Dienstleistungen und Aktionen</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-panel">
+            <p>Hiermit willigen Sie ein, dass die apoBank Sie über Produkte, Dienstleistungen und Aktionen informieren darf – per E-Mail, Post, Telefon oder SMS. Diese Einwilligung ist freiwillig und kann jederzeit widerrufen werden.</p>
+          </div>
         </div>
-        <div class="toggle-row">
-          <div><label class="toggle-switch"><input type="checkbox" checked disabled><span class="toggle-slider"></span></label></div>
-          <div class="toggle-label"><strong>Gesetzliche Verpflichtungen</strong><div class="sub">Wir sind gesetzlich verpflichtet, bestimmte Daten für die GwG-, FATCA- und CRS-Meldepflichten zu verarbeiten. (Art. 6 Abs. 1 lit. c DSGVO)</div></div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" aria-expanded="false" onclick="toggleAccordion(this)">
+            <span>Datenanalyse</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-panel">
+            <p>Die apoBank darf Ihre Daten analysieren, um Ihnen individuell passende Angebote und Empfehlungen zu unterbreiten. Dabei werden Informationen wie Ihr Nutzungsverhalten und Ihre Produktnutzung ausgewertet.</p>
+          </div>
         </div>
-        <div class="form-section-divider"></div>
-        <p class="form-section-label">Freiwillige Einwilligungen</p>
-        <div class="toggle-row">
-          <div><label class="toggle-switch"><input type="checkbox" id="toggle-marketing"><span class="toggle-slider"></span></label></div>
-          <div class="toggle-label"><strong>Marketing &amp; Produktinformationen</strong><div class="sub">Erhalte personalisierte Angebote, Produktneuigkeiten und Nachrichten von apoBank per E-Mail. Der Widerruf ist jederzeit möglich.</div></div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" aria-expanded="false" onclick="toggleAccordion(this)">
+            <span>Datenübermittlung an Partner und gebundene Handelsvertreter und Kontaktaufnahme</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-panel">
+            <p>Mit dieser Einwilligung stimmen Sie zu, dass Ihre Daten an ausgewählte Partner und gebundene Handelsvertreter der apoBank übermittelt werden dürfen, damit diese Sie mit für Sie relevanten Angeboten kontaktieren können.</p>
+          </div>
         </div>
-        <div class="toggle-row">
-          <div><label class="toggle-switch"><input type="checkbox" id="toggle-analytics"><span class="toggle-slider"></span></label></div>
-          <div class="toggle-label"><strong>Nutzungsanalyse</strong><div class="sub">Hilf uns, unsere Dienste zu verbessern, indem du anonyme Nutzungsdaten aus unserer App und dem Online-Banking teilen.</div></div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" aria-expanded="false" onclick="toggleAccordion(this)">
+            <span>Widerruf</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-panel">
+            <p>Sie können Ihre Einwilligungen jederzeit ohne Angabe von Gründen widerrufen – per Brief, E-Mail oder telefonisch. Ein Widerruf berührt nicht die Rechtmäßigkeit der bis dahin erfolgten Verarbeitung.</p>
+          </div>
         </div>
-        <div class="toggle-row">
-          <div><label class="toggle-switch"><input type="checkbox" id="toggle-partners"><span class="toggle-slider"></span></label></div>
-          <div class="toggle-label"><strong>Angebote von Gesundheitspartnern</strong><div class="sub">Erlaube ausgewählten Partnern aus dem Gesundheitswesen, dich mit exklusiven Studierendenrabatten und Angeboten zu kontaktieren.</div></div>
-        </div>
-        <p style="font-size:0.82rem;color:var(--text-muted);line-height:1.5;margin-top:12px;">Freiwillige Einwilligungen kannst du jederzeit in deinen Kontoeinstellungen verwalten oder widerrufen. Lies unsere vollständige <a href="#" style="color:var(--navy);">Datenschutzerklärung</a>.</p>
+
       </div>
     </div>
+
   </div>
+
   <div class="btn-row">
     <button class="btn btn-ghost" onclick="goToStep(9)">← Zurück</button>
     <button class="btn btn-primary" onclick="goToStep(11)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
@@ -1700,7 +1755,7 @@
             <span class="summary-sub-card-title">Kontaktdaten</span>
             <button class="summary-edit-btn" onclick="goToStep(7)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Bearbeiten</button>
           </div>
-          <div class="summary-entry"><div class="summary-entry-label">E-Mail</div><div class="summary-entry-value">maria.schneider@lmu.de</div></div>
+          <div class="summary-entry"><div class="summary-entry-label">E-Mail</div><div class="summary-entry-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b7dad6c5ded699c4d4dfd9d2ded3d2c5f7dbdac299d3d2">[email&#160;protected]</a></div></div>
           <div class="summary-entry"><div class="summary-entry-label">Mobiltelefon</div><div class="summary-entry-value">+49 171 234 5678</div></div>
         </div>
 
@@ -1820,7 +1875,7 @@
       ③ Dein apoBank-Konto wird aktiviert (1–2 Werktage)<br>
       ④ Du erhältst deine IBAN und kannst mit dem Banking beginnen
     </div>
-    <p style="font-size:0.85rem;color:var(--text-muted);">Fragen? Schreib uns an <a href="mailto:support@apobank.de" style="color:var(--navy);">support@apobank.de</a> oder ruf uns an: <strong>0800 123 456 78</strong>.</p>
+    <p style="font-size:0.85rem;color:var(--text-muted);">Fragen? Schreib uns an <a href="/cdn-cgi/l/email-protection#a7d4d2d7d7c8d5d3e7c6d7c8c5c6c9cc89c3c2" style="color:var(--navy);"><span class="__cf_email__" data-cfemail="added8ddddc2dfd9edccddc2cfccc3c683c9c8">[email&#160;protected]</span></a> oder ruf uns an: <strong>0800 123 456 78</strong>.</p>
   </div>
 </div>
 
@@ -1836,6 +1891,28 @@
     var next = document.getElementById('step-' + currentStep);
     if (next) next.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleAccordion(btn) {
+    var panel = btn.nextElementSibling;
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+    panel.classList.toggle('open', !isOpen);
+  }
+
+  function toggleNoId(btn) {
+    var panel = document.getElementById('no-id-accordion');
+    var chevron = btn.querySelector('.no-id-chevron');
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+    if (isOpen) {
+      panel.style.display = 'none';
+      btn.setAttribute('aria-expanded', 'false');
+      if (chevron) chevron.style.transform = '';
+    } else {
+      panel.style.display = 'block';
+      btn.setAttribute('aria-expanded', 'true');
+      if (chevron) chevron.style.transform = 'rotate(90deg)';
+    }
   }
 
   function addStaatsangehoerigkeit() {
@@ -1870,10 +1947,28 @@
     btn.style.display = (container && container.children.length >= 3) ? 'none' : 'inline';
   }
 
-  // Init first staatsangehörigkeit row
   document.addEventListener('DOMContentLoaded', function() {
     addStaatsangehoerigkeit();
   });
+
+  function toggleStudiumFields(el, e) {
+    if (e) e.preventDefault();
+    el.classList.toggle('checked');
+    var cb = el.querySelector('input[type="checkbox"]');
+    if (cb) cb.checked = el.classList.contains('checked');
+    var fields = document.getElementById('studium-fields');
+    if (fields) {
+      var enabled = el.classList.contains('checked');
+      fields.style.opacity = enabled ? '1' : '0.4';
+      fields.style.pointerEvents = enabled ? '' : 'none';
+      if (!enabled) {
+        var sg = document.getElementById('studiengang-select');
+        var hi = document.getElementById('hochschule-input');
+        if (sg) sg.value = '';
+        if (hi) { hi.disabled = true; hi.style.opacity = '0.4'; hi.value = ''; }
+      }
+    }
+  }
 
   function selectPill(el, name) {
     var group = el.closest('.pill-group');
@@ -1890,32 +1985,7 @@
     if (cb) cb.checked = el.classList.contains('selected');
   }
 
-  function toggleNoId(btn) {
-    var panel = document.getElementById('no-id-accordion');
-    var chevron = btn.querySelector('.no-id-chevron');
-    var isOpen = btn.getAttribute('aria-expanded') === 'true';
-    if (isOpen) {
-      panel.style.display = 'none';
-      btn.setAttribute('aria-expanded', 'false');
-      if (chevron) chevron.style.transform = '';
-    } else {
-      panel.style.display = 'block';
-      btn.setAttribute('aria-expanded', 'true');
-      if (chevron) chevron.style.transform = 'rotate(90deg)';
-    }
-  }
-
-  function toggleCheatMenu() {
-    var m = document.getElementById('cheat-menu');
-    if (m) m.style.display = m.style.display === 'none' ? 'block' : 'none';
-  }
-
-  function jumpTo(n) {
-    document.getElementById('cheat-menu').style.display = 'none';
-    goToStep(n);
-  }
-
-  // Keyboard support for choice-cards (Enter/Space activates)
+  // Keyboard support for choice-cards
   document.addEventListener('keydown', function(e) {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('choice-card')) {
       e.preventDefault();
@@ -1939,26 +2009,6 @@
     }
   }
 
-  function toggleStudiumFields(el, e) {
-    if (e) e.preventDefault();
-    el.classList.toggle('checked');
-    var cb = el.querySelector('input[type="checkbox"]');
-    if (cb) cb.checked = el.classList.contains('checked');
-    var fields = document.getElementById('studium-fields');
-    if (fields) {
-      var enabled = el.classList.contains('checked');
-      fields.style.opacity = enabled ? '1' : '0.4';
-      fields.style.pointerEvents = enabled ? '' : 'none';
-      // also reset hochschule if unchecked
-      if (!enabled) {
-        var sg = document.getElementById('studiengang-select');
-        var hi = document.getElementById('hochschule-input');
-        if (sg) sg.value = '';
-        if (hi) { hi.disabled = true; hi.style.opacity = '0.4'; hi.value = ''; }
-      }
-    }
-  }
-
   function toggleCheck(el, e) {
     if (e) e.preventDefault();
     el.classList.toggle('checked');
@@ -1969,6 +2019,17 @@
   function sendEmailLink() {
     var msg = document.getElementById('email-sent-msg');
     if (msg) msg.style.display = 'block';
+  }
+
+  function toggleCheatMenu() {
+    var m = document.getElementById('cheat-menu');
+    if (m) m.style.display = m.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function jumpTo(n) {
+    var m = document.getElementById('cheat-menu');
+    if (m) m.style.display = 'none';
+    goToStep(n);
   }
 </script>
 
