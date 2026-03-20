@@ -53,7 +53,7 @@
   .header-inner {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 12px;
   }
   .apo-logo {
     display: flex;
@@ -529,8 +529,12 @@
     text-decoration: underline;
     text-underline-offset: 2px;
     font-weight: 600;
-    margin-top: 4px;
     cursor: pointer;
+    background: none;
+    border: none;
+    font-family: 'Source Sans Pro', sans-serif;
+    padding: 0;
+    text-align: left;
   }
   .welcome-no-id-link svg { width: 15px; height: 15px; flex-shrink: 0; }
   .welcome-no-id-link:hover { opacity: 0.75; }
@@ -1046,6 +1050,7 @@
 <!-- Header -->
 <header>
   <div class="header-inner">
+    <img src="data:image/png;base64,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" alt="apoBank Logo" style="height: 32px; width: auto; flex-shrink: 0;">
     <span class="header-title" onclick="toggleCheatMenu()" style="cursor:pointer; user-select:none;" title="Testmenü öffnen">Girokonto für Studierende eröffnen</span>
   </div>
 </header>
@@ -1102,10 +1107,13 @@
           <li>Webcam und Mikrofon für die Videoidentifikation</li>
           <li>Deutschen Personalausweis oder Reisepass zur Identitätsprüfung</li>
         </ul>
-        <a href="#" class="welcome-no-id-link" onclick="return false;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <button type="button" class="welcome-no-id-link" onclick="toggleNoId(this)" aria-expanded="false" style="margin-top: 10px; padding-left: 42px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="no-id-chevron" style="transition: transform 0.2s;"><polyline points="9 18 15 12 9 6"/></svg>
           Ich habe keinen deutschen Personalausweis oder Reisepass
-        </a>
+        </button>
+        <div id="no-id-accordion" style="display:none; padding: 12px 42px 0; overflow:hidden;">
+          <p style="font-size: 0.88rem; color: var(--text); line-height: 1.6;">Dann kannst du dich auch mit deinem europäischen Ausweis zusammen mit einer deutschen Meldebescheinigung oder einer Gas-, Wasser- oder Strom-Rechnung mit deiner aktuellen Anschrift ausweisen.</p>
+        </div>
       </div>
     </div>
 
@@ -1827,6 +1835,21 @@
     el.classList.toggle('selected');
     var cb = el.querySelector('input[type="checkbox"]');
     if (cb) cb.checked = el.classList.contains('selected');
+  }
+
+  function toggleNoId(btn) {
+    var panel = document.getElementById('no-id-accordion');
+    var chevron = btn.querySelector('.no-id-chevron');
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+    if (isOpen) {
+      panel.style.display = 'none';
+      btn.setAttribute('aria-expanded', 'false');
+      if (chevron) chevron.style.transform = '';
+    } else {
+      panel.style.display = 'block';
+      btn.setAttribute('aria-expanded', 'true');
+      if (chevron) chevron.style.transform = 'rotate(90deg)';
+    }
   }
 
   function toggleCheatMenu() {
