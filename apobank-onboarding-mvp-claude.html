@@ -1071,10 +1071,9 @@
       <button onclick="jumpTo(9)"  class="cheat-btn">9 · Steuer</button>
       <button onclick="jumpTo(10)" class="cheat-btn">10 · Datenschutz</button>
       <button onclick="jumpTo(11)" class="cheat-btn">11 · Zusammenfassung</button>
-      <button onclick="jumpTo(12)" class="cheat-btn">12 · ID-Vorbereitung</button>
-      <button onclick="jumpTo(13)" class="cheat-btn">13 · Video-ID</button>
-      <button onclick="jumpTo(14)" class="cheat-btn">14 · Bestätigung</button>
-    </div>
+      <button onclick="jumpTo(12)" class="cheat-btn">12 · Legitimation</button>
+      <button onclick="jumpTo(13)" class="cheat-btn">13 · Bestätigung</button>
+      </div>
   </div>
 </div>
 
@@ -1668,106 +1667,69 @@
 </div>
 
 
+
 <!-- ═══════════════════════════════════════════════════════
-     SCHRITT 12 · VORBEREITUNG IDENTITÄTSPRÜFUNG
+     SCHRITT 12 · LEGITIMATION
 ════════════════════════════════════════════════════════ -->
 <div class="step-container" id="step-12">
-  <div class="card" style="text-align:center;">
-    <div class="card-header" style="text-align:left;">
-      <h1 class="step-title">Fast geschafft — Identitätsprüfung</h1>
-      <p class="step-subtitle">dein Antrag wurde gespeichert. Jetzt müssen wir deine Identität bestätigen. Dies erfolgt über unseren Partner <strong>IDnow</strong> und dauert ca. 3–5 Minuten.</p>
-    </div>
-    <div style="width:64px;height:64px;background:var(--navy-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-    </div>
-    <p style="font-weight:700;font-size:1rem;color:var(--navy);margin-bottom:8px;">Was du benötigst</p>
-    <p style="font-size:0.9rem;color:var(--text-muted);line-height:1.6;max-width:380px;margin:0 auto 24px;">Einen gültigen <strong>Personalausweis oder Reisepass</strong>, deine <strong>Immatrikulationsbescheinigung</strong> (als PDF oder Foto) sowie Zugriff auf die Kamera deines Smartphones.</p>
-    <div class="id-options" style="max-width:400px;margin:0 auto 24px;">
-      <div class="id-option primary" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToStep(13);}" onclick="goToStep(13)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;display:block;"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-        <div class="id-option-title">Jetzt starten</div>
-        <div class="id-option-sub">Video-Identifizierung beginnen</div>
-      </div>
-      <div class="id-option" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sendEmailLink();}" onclick="sendEmailLink()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2" style="margin:0 auto;display:block;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <div class="id-option-title">Später fortfahren</div>
-        <div class="id-option-sub">Sicheren Link per E-Mail zusenden</div>
-      </div>
-    </div>
-    <div id="email-sent-msg" style="display:none;background:var(--navy-pale);border-radius:8px;padding:14px 18px;font-size:0.88rem;color:var(--navy);">
-      ✓ Ein Verifizierungslink wurde an <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="355854475c541b46565d5b505c515047755958401b5150">[email&#160;protected]</a></strong> gesendet. Der Link ist 7 Tage gültig.
-    </div>
-  </div>
-  <div class="btn-row">
-    <button class="btn btn-ghost" onclick="goToStep(11)">← Zurück zur Zusammenfassung</button>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     SCHRITT 13 · IDENTITÄTSPRÜFUNG
-════════════════════════════════════════════════════════ -->
-<div class="step-container" id="step-13">
   <div class="card">
-    <div class="card-header">
-      <h1 class="step-title">Video-Identifizierung</h1>
-      <p class="step-subtitle">Bereitgestellt von <strong>IDnow</strong> – einem regulierten eID-Dienstleister. deine Daten werden sicher in Deutschland verarbeitet.</p>
-    </div>
-    <div class="info-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      Dieser Vorgang wird live mit einem geschulten Mitarbeiter per Videoanruf durchgeführt. Die gesamte Sitzung ist verschlüsselt und entspricht den EU-eIDAS-Anforderungen.
-    </div>
-    <div class="card-section-title">Ablauf der Identifizierung – Beispiel</div>
-    <div class="id-flow">
-      <div class="id-step"><div class="id-step-num">1</div><div class="id-step-content"><div class="id-step-title">Ausweisdokument bereithalten</div><div class="id-step-desc">Halte deinen gültigen Personalausweis oder Reisepass bereit. Stelle sicher, dass das Dokument nicht abgelaufen ist und die Lichtbildseite gut sichtbar ist.</div></div></div>
-      <div class="id-step"><div class="id-step-num">2</div><div class="id-step-content"><div class="id-step-title">Videoanruf starten</div><div class="id-step-desc">Ein IDnow-Mitarbeiter verbindet sich per Live-Video mit dir. Durchschnittliche Wartezeit: unter 2 Minuten. Der Anruf ist auf Deutsch und Englisch möglich.</div></div></div>
-      <div class="id-step">
-        <div class="id-step-num">3</div>
-        <div class="id-step-content">
-          <div class="id-step-title">Ausweis in die Kamera halten</div>
-          <div class="id-step-desc">Du wirst gebeten, Ihr Ausweisdokument vor die Kamera zu halten. Der Mitarbeiter scannt beide Seiten des Dokuments.</div>
-          <div class="id-step-img">
-            <div class="id-card-mock">
-              <div><div class="id-card-flag">🇩🇪</div><div class="id-card-title">Personalausweis · Identity Card</div></div>
-              <div><div class="id-card-name">SCHNEIDER, MARIA</div><div class="id-card-num">L01X00T475</div></div>
-              <div class="id-card-bottom"><div class="id-card-exp">Gültig bis: 14.03.2031</div><div style="font-size:0.6rem;color:var(--text-muted);">D&lt;&lt;SCHNEIDER&lt;&lt;MARIA&lt;&lt;&lt;</div></div>
-            </div>
-            <div class="scan-overlay">
-              <div class="scan-corners"><div class="scan-corner tl"></div><div class="scan-corner tr"></div><div class="scan-corner bl"></div><div class="scan-corner br"></div></div>
-              <div class="scan-line"></div>
-            </div>
+    <div class="form-layout">
+      <div class="form-left">
+        <h1>Fast geschafft!</h1>
+        <p>Vielen Dank, dass du dich für die apoBank entschieden hast.</p>
+      </div>
+      <div class="form-right" style="display: flex; flex-direction: column; gap: 28px;">
+
+        <!-- Nächster Schritt -->
+        <div>
+          <p style="font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 8px;">Nächster Schritt: Legitimation</p>
+          <p style="font-size: 0.95rem; color: var(--text); line-height: 1.6; margin-bottom: 8px;">Um die Kontoeröffnung abzuschließen, musst du nur noch deine Identität bestätigen.</p>
+          <p style="font-size: 0.95rem; color: var(--text); line-height: 1.6;">Dazu wirst du im nächsten Schritt zu unserem Dienstleister <strong>IDnow</strong> weitergeleitet. Dort kannst du deine bevorzugte Identifikationsmethode auswählen und durchführen.</p>
+        </div>
+
+        <!-- Divider -->
+        <div style="height: 1px; background: var(--border);"></div>
+
+        <!-- Später fortsetzen -->
+        <div>
+          <p style="font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 8px;">Lieber später fortsetzen?</p>
+          <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">Du kannst die Identifikation auch später durchführen. Wir senden dir einen Link per E-Mail, mit dem du den Prozess jederzeit fortsetzen kannst. Der Link ist <strong>30 Tage gültig</strong>.</p>
+          <div id="email-sent-msg" style="display:none; margin-top: 12px; background:var(--navy-pale); border-radius:6px; padding:12px 16px; font-size:0.88rem; color:var(--navy);">
+            ✓ Wir haben dir einen Link an deine E-Mail-Adresse gesendet. Der Link ist 30 Tage gültig.
           </div>
         </div>
+
       </div>
-      <div class="id-step"><div class="id-step-num">4</div><div class="id-step-content"><div class="id-step-title">Live-Verifizierung &amp; Liveness-Check</div><div class="id-step-desc">Der Mitarbeiter bittet dich, den Ausweis kurz zu drehen und einen kurzen Liveness-Check durchzuführen (z. B. den Kopf leicht zu drehen), um zu bestätigen, dass du der Ausweisinhaber sind.</div></div></div>
-      <div class="id-step"><div class="id-step-num">5</div><div class="id-step-content"><div class="id-step-title">Immatrikulationsbescheinigung hochladen</div><div class="id-step-desc">Nach dem Videoanruf wirst du aufgefordert, deine aktuelle Immatrikulationsbescheinigung als Nachweis deines Gesundheitsstudiums hochzuladen.</div></div></div>
-      <div class="id-step"><div class="id-step-num">6</div><div class="id-step-content"><div class="id-step-title">Identifizierung abgeschlossen</div><div class="id-step-desc">Du erhältst innerhalb weniger Minuten eine Bestätigungs-E-Mail. dein Konto wird nach Prüfung durch unser Team innerhalb von 1–2 Werktagen aktiviert.</div></div></div>
     </div>
   </div>
   <div class="btn-row">
-    <button class="btn btn-ghost" onclick="goToStep(12)">← Zurück</button>
-    <button class="btn btn-cta" onclick="goToStep(14)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-      Video-Identifizierung starten
-    </button>
+    <button class="btn btn-ghost" onclick="goToStep(11)">← Zurück</button>
+    <div style="display: flex; gap: 12px;">
+      <button type="button" class="btn btn-secondary" onclick="sendEmailLink()">Später fortsetzen</button>
+      <button class="btn btn-primary" onclick="goToStep(13)">
+        Weiter zur Legitimation
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════
-     SCHRITT 14 · BESTÄTIGUNG
+     SCHRITT 13 · BESTÄTIGUNG
 ════════════════════════════════════════════════════════ -->
-<div class="step-container" id="step-14">
+<div class="step-container" id="step-13">
   <div class="card success-screen">
     <div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-    <h1 class="step-title" style="margin-bottom:8px;">Antrag erfolgreich eingereicht!</h1>
-    <p class="step-subtitle" style="margin-bottom:24px;">deine Identitätsprüfung wurde erfolgreich gestartet. Du erhältst eine E-Mail an <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5a8a4b7aca4ebb6a6adaba0aca1a0b785a9a8b0eba1a0">[email&#160;protected]</a></strong>, sobald dein Konto aktiviert wurde.</p>
-    <div style="background:var(--bg);border-radius:10px;padding:20px 24px;text-align:left;font-size:0.88rem;color:var(--text-muted);line-height:1.7;margin-bottom:24px;">
-      <strong style="color:var(--text);display:block;margin-bottom:6px;">Wie geht es weiter?</strong>
+    <h1 class="step-title" style="margin-bottom: 8px;">Antrag erfolgreich eingereicht!</h1>
+    <p class="step-subtitle" style="margin-bottom: 24px;">Deine Identitätsprüfung wurde erfolgreich gestartet. Du erhältst eine E-Mail, sobald dein Konto aktiviert wurde.</p>
+    <div style="background:var(--bg);border-radius:8px;padding:20px 24px;text-align:left;font-size:0.9rem;color:var(--text-muted);line-height:1.8;margin-bottom:24px;">
+      <strong style="color:var(--text);display:block;margin-bottom:8px;">Wie geht es weiter?</strong>
       ① Unser Team prüft das Ergebnis deiner Identifizierung<br>
-      ② deine Immatrikulationsbescheinigung wird geprüft<br>
-      ③ dein apoBank-Konto wird aktiviert (1–2 Werktage)<br>
-      ④ Du erhältst deine IBAN und können mit dem Banking beginnen
+      ② Deine Immatrikulationsbescheinigung wird geprüft<br>
+      ③ Dein apoBank-Konto wird aktiviert (1–2 Werktage)<br>
+      ④ Du erhältst deine IBAN und kannst mit dem Banking beginnen
     </div>
-    <p style="font-size:0.85rem;color:var(--text-muted);">Fragen? Schreib uns an <a href="/cdn-cgi/l/email-protection#2d5e585d5d425f596d4c5d424f4c4346034948" style="color:var(--navy);"><span class="__cf_email__" data-cfemail="96e5e3e6e6f9e4e2d6f7e6f9f4f7f8fdb8f2f3">[email&#160;protected]</span></a> oder rufen Sie an: <strong>0800 123 456 78</strong>.</p>
+    <p style="font-size:0.85rem;color:var(--text-muted);">Fragen? Schreib uns an <a href="mailto:support@apobank.de" style="color:var(--navy);">support@apobank.de</a> oder ruf uns an: <strong>0800 123 456 78</strong>.</p>
   </div>
 </div>
 
