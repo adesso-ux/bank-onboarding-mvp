@@ -1131,6 +1131,13 @@
     line-height: 1.6;
   }
   .accordion-panel.open { display: block; }
+  .btn-primary:disabled,
+  .btn-primary[disabled] {
+    opacity: 0.38;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
 </style>
 </head>
 <body>
@@ -1299,7 +1306,7 @@
   </div>
   <div class="btn-row">
     <button class="btn btn-ghost" onclick="goToStep(1)">← Zurück</button>
-    <button class="btn btn-primary" onclick="goToStep(3)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-primary" id="btn-next-2" onclick="goToStep(3)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -1355,7 +1362,7 @@
   </div>
   <div class="btn-row">
     <button class="btn btn-ghost" onclick="goToStep(2)">← Zurück</button>
-    <button class="btn btn-primary" onclick="goToStep(4)">Akzeptieren &amp; Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-primary" id="btn-next-3" onclick="goToStep(4)">Akzeptieren &amp; Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -1393,7 +1400,7 @@
   </div>
   <div class="btn-row">
     <button class="btn btn-ghost" onclick="goToStep(3)">← Zurück</button>
-    <button class="btn btn-primary" onclick="goToStep(5)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-primary" id="btn-next-4" onclick="goToStep(5)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -1435,7 +1442,7 @@
   </div>
   <div class="btn-row">
     <button class="btn btn-ghost" onclick="goToStep(4)">← Zurück</button>
-    <button class="btn btn-primary" onclick="goToStep(6)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-primary" id="btn-next-5" onclick="goToStep(6)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -1460,14 +1467,17 @@
         </div>
         <div class="field"><label>Adresszusatz <span class="hint">(optional)</span></label><input type="text" placeholder="Wohnungsnr., Etage etc."></div>
         <div class="field"><label>Land</label>
-          <select><option value="">Bitte wählen</option><option selected>Deutschland</option><option>Österreich</option><option>Schweiz</option><option>Frankreich</option><option>Niederlande</option><option>Sonstiges EU-Land</option></select>
+          <select disabled style="opacity: 0.6; cursor: not-allowed;">
+            <option selected>Deutschland</option>
+          </select>
         </div>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-top: 4px;">Im Moment kannst du nur ein Konto eröffnen, wenn du in Deutschland gemeldet bist. Wenn deine Meldeadresse im Ausland liegt, kontaktiere bitte eine unserer Filialen. <a href="https://www.apobank.de/service/filiale-finden#!" target="_blank" style="color: var(--navy); font-weight: 600;">Zur Filialsuche</a></p>
       </div>
     </div>
   </div>
   <div class="btn-row">
     <button class="btn btn-ghost" onclick="goToStep(5)">← Zurück</button>
-    <button class="btn btn-primary" onclick="goToStep(7)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-primary" id="btn-next-6" onclick="goToStep(7)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -1490,7 +1500,7 @@
   </div>
   <div class="btn-row">
     <button class="btn btn-ghost" onclick="goToStep(6)">← Zurück</button>
-    <button class="btn btn-primary" onclick="goToStep(8)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-primary" id="btn-next-7" onclick="goToStep(8)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -1510,12 +1520,13 @@
           <div class="check-text">Ich bestätige, dass ich Student*in der akademischen Heilberufe bin.</div>
         </label>
         <div id="studium-fields" style="display: flex; flex-direction: column; gap: 16px; opacity: 0.4; pointer-events: none;">
-          <div class="field"><label>Studiengang</label>
+          <div class="field"><label>Fachrichtung</label>
             <select id="studiengang-select" onchange="var h=document.getElementById('hochschule-input');h.disabled=this.value==='';h.style.opacity=this.value===''?'0.4':'1';h.style.cursor=this.value===''?'not-allowed':'';">
-              <option value="">Bitte Studiengang wählen</option>
-              <optgroup label="Medizin"><option>Humanmedizin</option><option>Zahnmedizin</option><option>Tiermedizin / Veterinärmedizin</option><option>Pharmazie</option></optgroup>
-              <optgroup label="Gesundheitswissenschaften"><option>Pflegewissenschaft</option><option>Physiotherapie</option><option>Ergotherapie</option><option>Medizintechnik</option><option>Public Health</option><option>Gesundheitsmanagement</option></optgroup>
-              <optgroup label="Verwandte Studiengänge"><option>Biomedizin</option><option>Psychologie (klinischer Schwerpunkt)</option><option>Medizinische Informatik</option><option>Sonstiger gesundheitsbezogener Studiengang</option></optgroup>
+              <option value="">Bitte wählen</option>
+              <option>Humanmedizin in Ausbildung</option>
+              <option>Zahnmedizin in Ausbildung</option>
+              <option>Pharmazie in Ausbildung</option>
+              <option>Tiermedizin in Ausbildung</option>
             </select>
           </div>
           <div class="field"><label>Hochschule / Bildungseinrichtung</label>
@@ -1582,7 +1593,7 @@
   </div>
   <div class="btn-row">
     <button class="btn btn-ghost" onclick="goToStep(7)">← Zurück</button>
-    <button class="btn btn-primary" onclick="goToStep(9)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-primary" id="btn-next-8" onclick="goToStep(9)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -1633,7 +1644,7 @@
   </div>
   <div class="btn-row">
     <button class="btn btn-ghost" onclick="goToStep(8)">← Zurück</button>
-    <button class="btn btn-primary" onclick="goToStep(10)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-primary" id="btn-next-9" onclick="goToStep(10)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -1700,7 +1711,7 @@
 
   <div class="btn-row">
     <button class="btn btn-ghost" onclick="goToStep(9)">← Zurück</button>
-    <button class="btn btn-primary" onclick="goToStep(11)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-primary" id="btn-next-10" onclick="goToStep(11)">Weiter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -1882,6 +1893,124 @@
 </main>
 
 <script>
+  // ─── Validation ──────────────────────────────────────
+  var stepValidators = {
+    1: function() { return true; }, // welcome, no fields
+    2: function() {
+      // Kontomodell: one account type selected
+      var acctSelected = document.querySelector('[name="acct-type"]:checked') ||
+                         document.querySelector('.choice-card.selected[id^="card-"]');
+      return !!acctSelected;
+    },
+    3: function() {
+      return document.getElementById('cr-tc') &&
+             document.getElementById('cr-tc').classList.contains('checked');
+    },
+    4: function() {
+      // Name: anrede pill selected + vornamen + nachname
+      var anrede = document.querySelector('.pill-option.selected');
+      var vornamen = document.querySelector('#step-4 input[placeholder*="Maria"]');
+      var nachname = document.querySelector('#step-4 input[placeholder*="Schneider"]');
+      return !!(anrede && vornamen && vornamen.value.trim() &&
+                nachname && nachname.value.trim());
+    },
+    5: function() {
+      var s = document.querySelector('#step-5');
+      if (!s) return false;
+      var dob = s.querySelector('input[type="date"]');
+      var ort = s.querySelector('input[placeholder="Stadt"]');
+      var fam = s.querySelector('select[name="familienstand"]');
+      var staat = document.querySelector('#staatsangehoerigkeit-fields select');
+      return !!(dob && dob.value &&
+                ort && ort.value.trim() &&
+                fam && fam.value &&
+                staat && staat.value);
+    },
+    6: function() {
+      var s = document.querySelector('#step-6');
+      if (!s) return false;
+      var strasse = s.querySelector('input[placeholder*="Musterstra"]');
+      var nr = s.querySelector('input[placeholder="12a"]');
+      var plz = s.querySelector('input[placeholder="80331"]');
+      var ort = s.querySelector('input[placeholder*="M\u00fcnchen"]');
+      return !!(strasse && strasse.value.trim() &&
+                nr && nr.value.trim() &&
+                plz && plz.value.trim() &&
+                ort && ort.value.trim());
+    },
+    7: function() {
+      var s = document.querySelector('#step-7');
+      if (!s) return false;
+      var email = s.querySelector('input[type="email"]');
+      var tel = s.querySelector('input[type="tel"]');
+      return !!(email && email.value.trim() && email.value.includes('@') &&
+                tel && tel.value.trim());
+    },
+    8: function() {
+      // Studium: checkbox + fachrichtung + hochschule + semester + dates
+      var checked = document.getElementById('cr-student') &&
+                    document.getElementById('cr-student').classList.contains('checked');
+      var fach = document.getElementById('studiengang-select');
+      var hoch = document.getElementById('hochschule-input');
+      var s = document.querySelector('#step-8');
+      if (!s) return false;
+      var sem = s.querySelector('input[type="number"]');
+      var dates = s.querySelectorAll('input[type="date"]');
+      return !!(checked &&
+                fach && fach.value &&
+                hoch && hoch.value &&
+                sem && sem.value &&
+                dates[0] && dates[0].value &&
+                dates[1] && dates[1].value);
+    },
+    9: function() {
+      var s = document.querySelector('#step-9');
+      if (!s) return false;
+      var steuer = s.querySelector('input[type="text"]');
+      var usTax = document.querySelector('[name="us-tax"]:checked') ||
+                  document.querySelector('#step-9 .choice-card.selected');
+      var own = document.getElementById('cr-own-interest') &&
+                document.getElementById('cr-own-interest').classList.contains('checked');
+      return !!(steuer && steuer.value.trim() && usTax && own);
+    },
+    10: function() { return true; }, // no required fields
+  };
+
+  function validateStep(n) {
+    var btn = document.getElementById('btn-next-' + n);
+    if (!btn) return;
+    var validator = stepValidators[n];
+    var valid = validator ? validator() : true;
+    btn.disabled = !valid;
+  }
+
+  function setupValidation() {
+    // Run validation on every input/change/click in the document
+    document.addEventListener('input', function(e) {
+      validateStep(currentStep);
+    });
+    document.addEventListener('change', function(e) {
+      validateStep(currentStep);
+    });
+    // Also after click (for pills, checkboxes, choice cards)
+    document.addEventListener('click', function(e) {
+      setTimeout(function() { validateStep(currentStep); }, 10);
+    });
+    // Initial state for all steps
+    for (var i = 1; i <= 10; i++) {
+      validateStep(i);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    addStaatsangehoerigkeit();
+    setupValidation();
+    // Re-validate when switching steps
+    var origGoToStep = goToStep;
+    // Validate current step on load
+    validateStep(1);
+  });
+
   let currentStep = 1;
 
   function goToStep(n) {
@@ -1891,6 +2020,7 @@
     var next = document.getElementById('step-' + currentStep);
     if (next) next.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    validateStep(currentStep);
   }
 
   function toggleAccordion(btn) {
@@ -1946,10 +2076,6 @@
     if (!btn) return;
     btn.style.display = (container && container.children.length >= 3) ? 'none' : 'inline';
   }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    addStaatsangehoerigkeit();
-  });
 
   function toggleStudiumFields(el, e) {
     if (e) e.preventDefault();
