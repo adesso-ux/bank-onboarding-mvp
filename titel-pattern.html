@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100vh; padding: 24px; display: flex; flex-direction: column; gap: 32px; }
+  .card { background: white; border: 0.5px solid #dde0e6; border-radius: 12px; padding: 40px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; max-width: 860px; margin: 0 auto; width: 100%; }
+  .card-left h2 { font-size: 18px; font-weight: 600; color: #1a3a6b; margin-bottom: 10px; }
+  .card-left p { font-size: 13px; color: #666; line-height: 1.65; }
+  .form-section { display: flex; flex-direction: column; gap: 22px; }
+  .field-label { font-size: 13px; font-weight: 500; color: #1a1a2e; margin-bottom: 8px; }
+  .field-label span { font-weight: 400; color: #999; margin-left: 4px; }
+  .pill-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .pill { padding: 11px 22px; border-radius: 999px; border: 1px solid #cdd2db; background: white; font-size: 13px; color: #333; cursor: pointer; transition: border-color .15s, color .15s, background .15s; }
+  .pill:hover { border-color: #1a3a6b; color: #1a3a6b; }
+  .pill.active { border: 1.5px solid #1a3a6b; color: white; font-weight: 500; background: #1a3a6b; }
+  input[type=text], select { width: 100%; padding: 14px 16px; border: 1px solid #dde0e6; border-radius: 8px; font-size: 14px; color: #1a1a2e; background: white; outline: none; transition: border-color .15s, box-shadow .15s; appearance: none; -webkit-appearance: none; font-family: inherit; }
+  input[type=text]:focus, select:focus { border-color: #1a3a6b; box-shadow: 0 0 0 3px rgba(26,58,107,.08); }
+  input[type=text]::placeholder { color: #bbb; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
+  .variant-header { max-width: 860px; margin: 0 auto; width: 100%; }
+  .variant-header h3 { font-size: 18px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+  .variant-header p { font-size: 13px; color: #888; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="variant-header">
+  <h3>Option A</h3>
+  <p>Alle Titel als Pills. Prof. ist unabhängig wählbar, die Dr.-Varianten schließen sich gegenseitig aus.</p>
+</div>
+<div class="card">
+  <div class="card-left">
+    <h2>Wie lautet dein Name?</h2>
+    <p>Bitte denke daran, dass alle Angaben mit denen in deinem Ausweisdokument übereinstimmen müssen. Das heißt, dass du z. B. alle deine Vor- und Nachnamen vollständig angeben musst.</p>
+  </div>
+  <div class="form-section">
+    <div>
+      <div class="field-label">Anrede</div>
+      <div class="pill-group" id="a-anrede">
+        <button class="pill" onclick="selectExclusive('a-anrede', this)">Herr</button>
+        <button class="pill" onclick="selectExclusive('a-anrede', this)">Frau</button>
+        <button class="pill" onclick="selectExclusive('a-anrede', this)">Keine Anrede</button>
+      </div>
+    </div>
+    <div>
+      <div class="field-label">Titel <span>(optional)</span></div>
+      <div class="pill-group" id="a-titel">
+        <button class="pill" id="a-prof" onclick="togglePill('a-prof')">Prof.</button>
+        <button class="pill" onclick="selectExclusive('a-titel', this, 'a-prof')">Dr.</button>
+        <button class="pill" onclick="selectExclusive('a-titel', this, 'a-prof')">Dr. Dr.</button>
+        <button class="pill" onclick="selectExclusive('a-titel', this, 'a-prof')">Dr. Dr. Dr.</button>
+        <button class="pill" onclick="selectExclusive('a-titel', this, 'a-prof')">MUDr.</button>
+      </div>
+    </div>
+    <div>
+      <div class="field-label">Vornamen</div>
+      <input type="text" placeholder="z. B. Maria Anna">
+    </div>
+    <div>
+      <div class="field-label">Nachname</div>
+      <input type="text" placeholder="z. B. Schneider">
+    </div>
+    <div>
+      <div class="field-label">Abweichender Geburtsname <span>(optional)</span></div>
+      <input type="text" placeholder="Leer lassen, wenn identisch mit Nachnamen">
+    </div>
+  </div>
+</div>
+
+<div class="variant-header">
+  <h3>Option B</h3>
+  <p>Wie Option A, aber seltene Titel (Dr. Dr., Dr. Dr. Dr., MUDr.) sind zunächst ausgeblendet und können bei Bedarf eingeblendet werden.</p>
+</div>
+<div class="card">
+  <div class="card-left">
+    <h2>Wie lautet dein Name?</h2>
+    <p>Bitte denke daran, dass alle Angaben mit denen in deinem Ausweisdokument übereinstimmen müssen. Das heißt, dass du z. B. alle deine Vor- und Nachnamen vollständig angeben musst.</p>
+  </div>
+  <div class="form-section">
+    <div>
+      <div class="field-label">Anrede</div>
+      <div class="pill-group" id="b-anrede">
+        <button class="pill" onclick="selectExclusive('b-anrede', this)">Herr</button>
+        <button class="pill" onclick="selectExclusive('b-anrede', this)">Frau</button>
+        <button class="pill" onclick="selectExclusive('b-anrede', this)">Keine Anrede</button>
+      </div>
+    </div>
+    <div>
+      <div class="field-label">Titel <span>(optional)</span></div>
+      <div class="pill-group" id="b-titel" style="align-items: center;">
+        <button class="pill" id="b-prof" onclick="togglePill('b-prof')">Prof.</button>
+        <button class="pill" onclick="selectExclusive('b-titel', this, 'b-prof')">Dr.</button>
+        <span id="b-extra" style="display: flex; gap: 8px; align-items: center;">
+          <button class="pill" onclick="selectExclusive('b-titel', this, 'b-prof')" style="display:none" data-extra>Dr. Dr.</button>
+          <button class="pill" onclick="selectExclusive('b-titel', this, 'b-prof')" style="display:none" data-extra>Dr. Dr. Dr.</button>
+          <button class="pill" onclick="selectExclusive('b-titel', this, 'b-prof')" style="display:none" data-extra>MUDr.</button>
+        </span>
+        <button id="b-show-more" onclick="showMoreTitles()" style="background:none;border:none;cursor:pointer;font-size:13px;color:#1a3a6b;padding:0;white-space:nowrap;">+ Weitere Titel anzeigen</button>
+      </div>
+    </div>
+    <div>
+      <div class="field-label">Vornamen</div>
+      <input type="text" placeholder="z. B. Maria Anna">
+    </div>
+    <div>
+      <div class="field-label">Nachname</div>
+      <input type="text" placeholder="z. B. Schneider">
+    </div>
+    <div>
+      <div class="field-label">Abweichender Geburtsname <span>(optional)</span></div>
+      <input type="text" placeholder="Leer lassen, wenn identisch mit Nachnamen">
+    </div>
+  </div>
+</div>
+
+<div class="variant-header">
+  <h3>Option C</h3>
+  <p>Zwei Dropdowns nebeneinander – eines für Prof., eines für die Dr.-Varianten. Kompakter, aber weniger direkt scanbar als Pills.</p>
+</div>
+<div class="card">
+  <div class="card-left">
+    <h2>Wie lautet dein Name?</h2>
+    <p>Bitte denke daran, dass alle Angaben mit denen in deinem Ausweisdokument übereinstimmen müssen. Das heißt, dass du z. B. alle deine Vor- und Nachnamen vollständig angeben musst.</p>
+  </div>
+  <div class="form-section">
+    <div>
+      <div class="field-label">Anrede</div>
+      <div class="pill-group" id="c-anrede">
+        <button class="pill" onclick="selectExclusive('c-anrede', this)">Herr</button>
+        <button class="pill" onclick="selectExclusive('c-anrede', this)">Frau</button>
+        <button class="pill" onclick="selectExclusive('c-anrede', this)">Keine Anrede</button>
+      </div>
+    </div>
+    <div>
+      <div class="field-label">Titel <span>(optional)</span></div>
+      <div style="display: flex; gap: 12px;">
+        <div style="flex:1">
+          <select>
+            <option value="" disabled selected>Bitte auswählen</option>
+            <option>Prof.</option>
+            <option value="">Keine Auswahl</option>
+          </select>
+        </div>
+        <div style="flex:1">
+          <select>
+            <option value="" disabled selected>Bitte auswählen</option>
+            <option>Dr.</option>
+            <option>Dr. Dr.</option>
+            <option>Dr. Dr. Dr.</option>
+            <option>MUDr.</option>
+            <option value="">Keine Auswahl</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="field-label">Vornamen</div>
+      <input type="text" placeholder="z. B. Maria Anna">
+    </div>
+    <div>
+      <div class="field-label">Nachname</div>
+      <input type="text" placeholder="z. B. Schneider">
+    </div>
+    <div>
+      <div class="field-label">Abweichender Geburtsname <span>(optional)</span></div>
+      <input type="text" placeholder="Leer lassen, wenn identisch mit Nachnamen">
+    </div>
+  </div>
+</div>
+
+<div class="variant-header">
+  <h3>Option D</h3>
+  <p>Wie Option C, aber mit separaten Labels pro Dropdown – verdeutlicht den semantischen Unterschied zwischen Amts-/Berufsbezeichnung und akademischem Grad.</p>
+</div>
+<div class="card">
+  <div class="card-left">
+    <h2>Wie lautet dein Name?</h2>
+    <p>Bitte denke daran, dass alle Angaben mit denen in deinem Ausweisdokument übereinstimmen müssen. Das heißt, dass du z. B. alle deine Vor- und Nachnamen vollständig angeben musst.</p>
+  </div>
+  <div class="form-section">
+    <div>
+      <div class="field-label">Anrede</div>
+      <div class="pill-group" id="d-anrede">
+        <button class="pill" onclick="selectExclusive('d-anrede', this)">Herr</button>
+        <button class="pill" onclick="selectExclusive('d-anrede', this)">Frau</button>
+        <button class="pill" onclick="selectExclusive('d-anrede', this)">Keine Anrede</button>
+      </div>
+    </div>
+    <div>
+      <div style="display: flex; gap: 12px;">
+        <div style="flex:1">
+          <div class="field-label">Amts-/Berufsbezeichnung <span>(optional)</span></div>
+          <select>
+            <option value="" disabled selected>Bitte auswählen</option>
+            <option>Prof.</option>
+            <option value="">Keine Auswahl</option>
+          </select>
+        </div>
+        <div style="flex:1">
+          <div class="field-label">Akademischer Grad <span>(optional)</span></div>
+          <select>
+            <option value="" disabled selected>Bitte auswählen</option>
+            <option>Dr.</option>
+            <option>Dr. Dr.</option>
+            <option>Dr. Dr. Dr.</option>
+            <option>MUDr.</option>
+            <option value="">Keine Auswahl</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="field-label">Vornamen</div>
+      <input type="text" placeholder="z. B. Maria Anna">
+    </div>
+    <div>
+      <div class="field-label">Nachname</div>
+      <input type="text" placeholder="z. B. Schneider">
+    </div>
+    <div>
+      <div class="field-label">Abweichender Geburtsname <span>(optional)</span></div>
+      <input type="text" placeholder="Leer lassen, wenn identisch mit Nachnamen">
+    </div>
+  </div>
+</div>
+
+<script>
+  function selectExclusive(groupId, el, excludeId) {
+    var wasActive = el.classList.contains('active');
+    document.getElementById(groupId).querySelectorAll('.pill').forEach(function(p) {
+      if (excludeId && p.id === excludeId) return;
+      p.classList.remove('active');
+    });
+    if (!wasActive) el.classList.add('active');
+  }
+
+  function togglePill(id) {
+    document.getElementById(id).classList.toggle('active');
+  }
+
+  function showMoreTitles() {
+    document.querySelectorAll('[data-extra]').forEach(function(el) { el.style.display = ''; });
+    document.getElementById('b-show-more').style.display = 'none';
+  }
+</script>
+
+<div class="variant-header">
+  <h3>Option E</h3>
+  <p>Ein einzelnes Combobox-Dropdown mit Checkbox-Gruppe. Prof. ist unabhängig wählbar, die Dr.-Varianten schließen sich gegenseitig aus.</p>
+</div>
+<div class="card">
+  <div class="card-left">
+    <h2>Wie lautet dein Name?</h2>
+    <p>Bitte denke daran, dass alle Angaben mit denen in deinem Ausweisdokument übereinstimmen müssen. Das heißt, dass du z. B. alle deine Vor- und Nachnamen vollständig angeben musst.</p>
+  </div>
+  <div class="form-section">
+    <div>
+      <div class="field-label">Anrede</div>
+      <div class="pill-group" id="e-anrede">
+        <button class="pill" onclick="selectExclusive('e-anrede', this)">Herr</button>
+        <button class="pill" onclick="selectExclusive('e-anrede', this)">Frau</button>
+        <button class="pill" onclick="selectExclusive('e-anrede', this)">Keine Anrede</button>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="field-label">Titel <span>(optional)</span></div>
+      <div id="e-combo-trigger" onclick="toggleCombo()" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid #dde0e6;border-radius:8px;cursor:pointer;background:white;user-select:none;transition:border-color .15s,box-shadow .15s;">
+        <span id="e-combo-label" style="font-size:14px;color:#bbb;">Bitte auswählen</span>
+        <svg id="e-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" style="transition:transform .2s;flex-shrink:0"><path d="M1 1l5 5 5-5" stroke="#999" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div id="e-combo-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:white;border:1px solid #dde0e6;border-radius:8px;overflow:hidden;z-index:10;box-shadow:0 4px 12px rgba(0,0,0,.08);">
+        <label style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;font-size:14px;border-bottom:1px solid #f0f0f0;" onmouseenter="this.style.background='#f7f9fc'" onmouseleave="this.style.background='white'">
+          <input type="checkbox" id="e-check-prof" onchange="updateComboLabel()" style="width:16px;height:16px;accent-color:#1a3a6b;cursor:pointer;flex-shrink:0">
+          Prof.
+        </label>
+        <div style="padding:6px 0;">
+          <label style="display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;font-size:14px;" onmouseenter="this.style.background='#f7f9fc'" onmouseleave="this.style.background='white'">
+            <input type="radio" name="e-dr" value="Dr." onclick="toggleDr(this)" style="width:16px;height:16px;accent-color:#1a3a6b;cursor:pointer;flex-shrink:0">
+            Dr.
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;font-size:14px;" onmouseenter="this.style.background='#f7f9fc'" onmouseleave="this.style.background='white'">
+            <input type="radio" name="e-dr" value="Dr. Dr." onclick="toggleDr(this)" style="width:16px;height:16px;accent-color:#1a3a6b;cursor:pointer;flex-shrink:0">
+            Dr. Dr.
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;font-size:14px;" onmouseenter="this.style.background='#f7f9fc'" onmouseleave="this.style.background='white'">
+            <input type="radio" name="e-dr" value="Dr. Dr. Dr." onclick="toggleDr(this)" style="width:16px;height:16px;accent-color:#1a3a6b;cursor:pointer;flex-shrink:0">
+            Dr. Dr. Dr.
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;font-size:14px;" onmouseenter="this.style.background='#f7f9fc'" onmouseleave="this.style.background='white'">
+            <input type="radio" name="e-dr" value="MUDr." onclick="toggleDr(this)" style="width:16px;height:16px;accent-color:#1a3a6b;cursor:pointer;flex-shrink:0">
+            MUDr.
+          </label>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="field-label">Vornamen</div>
+      <input type="text" placeholder="z. B. Maria Anna">
+    </div>
+    <div>
+      <div class="field-label">Nachname</div>
+      <input type="text" placeholder="z. B. Schneider">
+    </div>
+    <div>
+      <div class="field-label">Abweichender Geburtsname <span>(optional)</span></div>
+      <input type="text" placeholder="Leer lassen, wenn identisch mit Nachnamen">
+    </div>
+  </div>
+</div>
+
+<script>
+  var comboOpen = false;
+
+  function toggleCombo() {
+    comboOpen = !comboOpen;
+    var dd = document.getElementById('e-combo-dropdown');
+    var chevron = document.getElementById('e-chevron');
+    var trigger = document.getElementById('e-combo-trigger');
+    dd.style.display = comboOpen ? 'block' : 'none';
+    chevron.style.transform = comboOpen ? 'rotate(180deg)' : '';
+    trigger.style.borderColor = comboOpen ? '#1a3a6b' : '#dde0e6';
+    trigger.style.boxShadow = comboOpen ? '0 0 0 3px rgba(26,58,107,.08)' : '';
+  }
+
+  var lastDr = null;
+  function toggleDr(el) {
+    if (el.value === lastDr) {
+      el.checked = false;
+      lastDr = null;
+    } else {
+      lastDr = el.value;
+    }
+    updateComboLabel();
+  }
+
+  function updateComboLabel() {
+    var prof = document.getElementById('e-check-prof').checked;
+    var dr = document.querySelector('input[name="e-dr"]:checked');
+    var parts = [];
+    if (prof) parts.push('Prof.');
+    if (dr) parts.push(dr.value);
+    var label = document.getElementById('e-combo-label');
+    label.textContent = parts.length ? parts.join(' ') : 'Bitte auswählen';
+    label.style.color = parts.length ? '#1a1a2e' : '#bbb';
+  }
+
+  document.addEventListener('click', function(e) {
+    var trigger = document.getElementById('e-combo-trigger');
+    var dd = document.getElementById('e-combo-dropdown');
+    if (comboOpen && !trigger.contains(e.target) && !dd.contains(e.target)) {
+      comboOpen = false;
+      dd.style.display = 'none';
+      document.getElementById('e-chevron').style.transform = '';
+      trigger.style.borderColor = '#dde0e6';
+      trigger.style.boxShadow = '';
+    }
+  });
+</script>
+
+<div class="variant-header">
+  <h3>Option F</h3>
+  <p>Gleiche Logik wie Option E – Prof. als Checkbox, Dr.-Varianten als Radio – aber direkt im Card sichtbar, ohne Dropdown.</p>
+</div>
+<div class="card">
+  <div class="card-left">
+    <h2>Wie lautet dein Name?</h2>
+    <p>Bitte denke daran, dass alle Angaben mit denen in deinem Ausweisdokument übereinstimmen müssen. Das heißt, dass du z. B. alle deine Vor- und Nachnamen vollständig angeben musst.</p>
+  </div>
+  <div class="form-section">
+    <div>
+      <div class="field-label">Anrede</div>
+      <div class="pill-group" id="f-anrede">
+        <button class="pill" onclick="selectExclusive('f-anrede', this)">Herr</button>
+        <button class="pill" onclick="selectExclusive('f-anrede', this)">Frau</button>
+        <button class="pill" onclick="selectExclusive('f-anrede', this)">Keine Anrede</button>
+      </div>
+    </div>
+    <div>
+      <div class="field-label">Titel <span>(optional)</span></div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <label style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #dde0e6;border-radius:8px;cursor:pointer;font-size:14px;color:#1a1a2e;" onmouseenter="this.style.background='#f7f9fc'" onmouseleave="this.style.background='white'">
+          <input type="checkbox" id="f-check-prof" onchange="updateFLabel()" style="width:16px;height:16px;accent-color:#1a3a6b;cursor:pointer;flex-shrink:0">
+          Prof.
+        </label>
+        <div style="display:flex;gap:4px;">
+          <label style="display:flex;align-items:center;gap:8px;padding:12px 14px;border:1px solid #dde0e6;border-radius:8px;cursor:pointer;font-size:14px;color:#1a1a2e;flex:1;" onmouseenter="this.style.background='#f7f9fc'" onmouseleave="this.style.background='white'">
+            <input type="radio" name="f-dr" value="Dr." onclick="toggleFDr(this)" style="width:16px;height:16px;accent-color:#1a3a6b;cursor:pointer;flex-shrink:0">
+            Dr.
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;padding:12px 14px;border:1px solid #dde0e6;border-radius:8px;cursor:pointer;font-size:14px;color:#1a1a2e;flex:1;" onmouseenter="this.style.background='#f7f9fc'" onmouseleave="this.style.background='white'">
+            <input type="radio" name="f-dr" value="Dr. Dr." onclick="toggleFDr(this)" style="width:16px;height:16px;accent-color:#1a3a6b;cursor:pointer;flex-shrink:0">
+            Dr. Dr.
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;padding:12px 14px;border:1px solid #dde0e6;border-radius:8px;cursor:pointer;font-size:14px;color:#1a1a2e;flex:1;" onmouseenter="this.style.background='#f7f9fc'" onmouseleave="this.style.background='white'">
+            <input type="radio" name="f-dr" value="Dr. Dr. Dr." onclick="toggleFDr(this)" style="width:16px;height:16px;accent-color:#1a3a6b;cursor:pointer;flex-shrink:0">
+            Dr. Dr. Dr.
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;padding:12px 14px;border:1px solid #dde0e6;border-radius:8px;cursor:pointer;font-size:14px;color:#1a1a2e;flex:1;" onmouseenter="this.style.background='#f7f9fc'" onmouseleave="this.style.background='white'">
+            <input type="radio" name="f-dr" value="MUDr." onclick="toggleFDr(this)" style="width:16px;height:16px;accent-color:#1a3a6b;cursor:pointer;flex-shrink:0">
+            MUDr.
+          </label>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="field-label">Vornamen</div>
+      <input type="text" placeholder="z. B. Maria Anna">
+    </div>
+    <div>
+      <div class="field-label">Nachname</div>
+      <input type="text" placeholder="z. B. Schneider">
+    </div>
+    <div>
+      <div class="field-label">Abweichender Geburtsname <span>(optional)</span></div>
+      <input type="text" placeholder="Leer lassen, wenn identisch mit Nachnamen">
+    </div>
+  </div>
+</div>
+
+<script>
+  var lastFDr = null;
+  function toggleFDr(el) {
+    if (el.value === lastFDr) {
+      el.checked = false;
+      lastFDr = null;
+    } else {
+      lastFDr = el.value;
+    }
+  }
+  function updateFLabel() {}
+</script>
+</body>
+</html>
