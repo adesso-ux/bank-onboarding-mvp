@@ -174,7 +174,8 @@ body{font-family:"Source Sans 3",sans-serif;background:#fafafb;color:#0b0f0f;min
               <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg>
               <div class="banner-texts">
                 <div class="banner-title">Bitte &uuml;berpr&uuml;fe deine Eingaben</div>
-                <div class="banner-body"><a onclick="document.getElementById('aktuell-us-anchor').scrollIntoView({behavior:'smooth'})">Spezifizierte US-Person:</a> Bitte best&auml;tige, dass du keine spezifizierte US-Person bist.</div>
+                <div class="banner-body hidden" id="aktuell-banner-de-line"><a onclick="document.getElementById('aktuell-us-anchor').scrollIntoView({behavior:'smooth'})">Steuerliche Ans&auml;ssigkeit:</a> Bitte best&auml;tige, dass du ausschlie&szlig;lich in Deutschland steuerlich ans&auml;ssig bist.</div>
+                <div class="banner-body hidden" id="aktuell-banner-us-line"><a onclick="document.getElementById('aktuell-us-anchor').scrollIntoView({behavior:'smooth'})">Spezifizierte US-Person:</a> Bitte best&auml;tige, dass du keine spezifizierte US-Person bist.</div>
               </div>
               <button class="banner-close" onclick="document.getElementById('aktuell-banner').classList.add('hidden')"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M13.5 4.5l-9 9M4.5 4.5l9 9" stroke="#410002" stroke-width="1.5" stroke-linecap="round"/></svg></button>
             </div>
@@ -191,10 +192,11 @@ body{font-family:"Source Sans 3",sans-serif;background:#fafafb;color:#0b0f0f;min
           <!-- Steuerliche Ansässigkeit -->
           <div class="form-section" id="aktuell-us-anchor">
             <div class="form-label">Steuerliche Ans&auml;ssigkeit</div>
-            <div class="cb-row" onclick="toggleCb('aktuell-cb-de')">
+            <div class="cb-row" onclick="toggleCb('aktuell-cb-de'); aktuellUpdate()">
               <div class="cb-box"><div class="cb-inner checked" id="aktuell-cb-de"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div></div>
               <span class="cb-text">Ich best&auml;tige, dass ich <span class="link">ausschlie&szlig;lich in Deutschland</span> steuerlich ans&auml;ssig bin.</span>
             </div>
+            <div class="inline-error hidden" id="aktuell-de-inline-err"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg><span class="inline-error-text">Bitte best&auml;tige, dass du ausschlie&szlig;lich in Deutschland steuerlich ans&auml;ssig bist.</span></div>
             <div class="cb-row" onclick="toggleCb('aktuell-cb-us'); aktuellUpdate()">
               <div class="cb-box"><div class="cb-inner" id="aktuell-cb-us"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div></div>
               <span class="cb-text">Ich best&auml;tige, dass ich <span class="link">keine spezifizierte US-Person</span> bin (z.B. durch Aufenthalt, Wohnsitz, Geburt in den USA, Greencard).</span>
@@ -233,7 +235,11 @@ body{font-family:"Source Sans 3",sans-serif;background:#fafafb;color:#0b0f0f;min
           <div class="error-banner hidden" id="a-banner">
             <div class="banner-top">
               <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg>
-              <div class="banner-texts"><div class="banner-title">Bitte &uuml;berpr&uuml;fe deine Eingaben</div><div class="banner-body"><a onclick="document.getElementById('a-us-anchor').scrollIntoView({behavior:'smooth'})">Spezifizierte US-Person:</a> Bitte best&auml;tige, dass du keine spezifizierte US-Person bist.</div></div>
+              <div class="banner-texts">
+                <div class="banner-title">Bitte &uuml;berpr&uuml;fe deine Eingaben</div>
+                <div class="banner-body hidden" id="a-banner-de-line"><a onclick="document.getElementById('a-us-anchor').scrollIntoView({behavior:'smooth'})">Steuerliche Ans&auml;ssigkeit:</a> Bitte best&auml;tige, dass du ausschlie&szlig;lich in Deutschland steuerlich ans&auml;ssig bist.</div>
+                <div class="banner-body hidden" id="a-banner-us-line"><a onclick="document.getElementById('a-us-anchor').scrollIntoView({behavior:'smooth'})">Spezifizierte US-Person:</a> Bitte best&auml;tige, dass du keine spezifizierte US-Person bist.</div>
+              </div>
               <button class="banner-close" onclick="document.getElementById('a-banner').classList.add('hidden')"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M13.5 4.5l-9 9M4.5 4.5l9 9" stroke="#410002" stroke-width="1.5" stroke-linecap="round"/></svg></button>
             </div>
             <div class="banner-actions"><button class="banner-btn" onclick="document.getElementById('a-us-anchor').scrollIntoView({behavior:'smooth'})">Direkt zum Fehler</button></div>
@@ -244,7 +250,8 @@ body{font-family:"Source Sans 3",sans-serif;background:#fafafb;color:#0b0f0f;min
           </div>
           <div class="form-section" id="a-us-anchor">
             <div class="form-label">Steuerliche Ans&auml;ssigkeit</div>
-            <div class="cb-row" onclick="toggleCb('a-cb-de')"><div class="cb-box"><div class="cb-inner checked" id="a-cb-de"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div></div><span class="cb-text">Ich best&auml;tige, dass ich <span class="link">ausschlie&szlig;lich in Deutschland</span> steuerlich ans&auml;ssig bin.</span></div>
+            <div class="cb-row" onclick="toggleCb('a-cb-de'); aUpdate()"><div class="cb-box"><div class="cb-inner checked" id="a-cb-de"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div></div><span class="cb-text">Ich best&auml;tige, dass ich <span class="link">ausschlie&szlig;lich in Deutschland</span> steuerlich ans&auml;ssig bin.</span></div>
+            <div class="inline-error hidden" id="a-de-inline-err"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg><span class="inline-error-text">Bitte best&auml;tige, dass du ausschlie&szlig;lich in Deutschland steuerlich ans&auml;ssig bist.</span></div>
             <div class="cb-row" onclick="toggleCb('a-cb-us'); aUpdate()"><div class="cb-box"><div class="cb-inner" id="a-cb-us"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div></div><span class="cb-text">Ich best&auml;tige, dass ich <span class="link">keine spezifizierte US-Person</span> bin (z.B. durch Aufenthalt, Wohnsitz, Geburt in den USA, Greencard).</span></div>
             <div class="inline-error hidden" id="a-inline-err"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg><span class="inline-error-text">Bitte best&auml;tige, dass du keine spezifizierte US-Person bist.</span></div>
           </div>
@@ -255,13 +262,35 @@ body{font-family:"Source Sans 3",sans-serif;background:#fafafb;color:#0b0f0f;min
         </div>
       </div></div>
     </main>
-    <!-- Modal A -->
-    <div class="modal-overlay hidden" id="a-modal">
+    <!-- Modal A: nur DE fehlt -->
+    <div class="modal-overlay hidden" id="a-modal-de">
+      <div class="modal">
+        <div class="modal-header"><div class="modal-title">Bitte &uuml;berpr&uuml;fe deine Eingaben</div><button class="modal-close" onclick="aCloseModal()"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M15 5l-10 10M5 5l10 10" stroke="#0b0f0f" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
+        <div class="modal-body">
+          <svg width="64" height="64" viewBox="0 0 64 64" style="flex-shrink:0"><circle cx="32" cy="32" r="28" stroke="#012169" stroke-width="2.5" fill="none"/><circle cx="32" cy="20" r="3" fill="#012169"/><rect x="29" y="28" width="6" height="20" rx="3" fill="#012169"/></svg>
+          <div class="modal-text"><p>Du hast nicht best&auml;tigt, dass du ausschlie&szlig;lich in Deutschland steuerlich ans&auml;ssig bist. Eine Online-Kontoer&ouml;ffnung ist daher leider nicht m&ouml;glich. Bitte wende dich in diesem Fall an unseren Kundensupport.</p><p>Sollte dies ein Versehen gewesen sein, gehe zur&uuml;ck zum Antrag und best&auml;tige die Angabe.</p></div>
+        </div>
+        <div class="modal-actions"><button class="btn-secondary" onclick="aCloseModal()">Zur&uuml;ck zum Antrag</button><button class="btn-primary">Termin vereinbaren</button></div>
+      </div>
+    </div>
+    <!-- Modal A: nur US fehlt -->
+    <div class="modal-overlay hidden" id="a-modal-us">
       <div class="modal">
         <div class="modal-header"><div class="modal-title">Bitte &uuml;berpr&uuml;fe deine Eingaben</div><button class="modal-close" onclick="aCloseModal()"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M15 5l-10 10M5 5l10 10" stroke="#0b0f0f" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
         <div class="modal-body">
           <svg width="64" height="64" viewBox="0 0 64 64" style="flex-shrink:0"><circle cx="32" cy="32" r="28" stroke="#012169" stroke-width="2.5" fill="none"/><circle cx="32" cy="20" r="3" fill="#012169"/><rect x="29" y="28" width="6" height="20" rx="3" fill="#012169"/></svg>
           <div class="modal-text"><p>Du hast nicht best&auml;tigt, dass du keine spezifizierte US-Person bist. In diesem Falle ist eine Online-Kontoer&ouml;ffnung leider nicht m&ouml;glich. Bitte wende dich in diesem Fall an unseren Kundensupport.</p><p>Sollte dies ein Versehen gewesen sein, gehe zur&uuml;ck zum Antrag und best&auml;tige die Angabe.</p></div>
+        </div>
+        <div class="modal-actions"><button class="btn-secondary" onclick="aCloseModal()">Zur&uuml;ck zum Antrag</button><button class="btn-primary">Termin vereinbaren</button></div>
+      </div>
+    </div>
+    <!-- Modal A: beide fehlen -->
+    <div class="modal-overlay hidden" id="a-modal-both">
+      <div class="modal">
+        <div class="modal-header"><div class="modal-title">Bitte &uuml;berpr&uuml;fe deine Eingaben</div><button class="modal-close" onclick="aCloseModal()"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M15 5l-10 10M5 5l10 10" stroke="#0b0f0f" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
+        <div class="modal-body">
+          <svg width="64" height="64" viewBox="0 0 64 64" style="flex-shrink:0"><circle cx="32" cy="32" r="28" stroke="#012169" stroke-width="2.5" fill="none"/><circle cx="32" cy="20" r="3" fill="#012169"/><rect x="29" y="28" width="6" height="20" rx="3" fill="#012169"/></svg>
+          <div class="modal-text"><p>Du hast nicht best&auml;tigt, dass du ausschlie&szlig;lich in Deutschland steuerlich ans&auml;ssig bist und keine spezifizierte US-Person bist. Eine Online-Kontoer&ouml;ffnung ist daher leider nicht m&ouml;glich. Bitte wende dich in diesem Fall an unseren Kundensupport.</p><p>Sollte dies ein Versehen gewesen sein, gehe zur&uuml;ck zum Antrag und best&auml;tige die Angaben.</p></div>
         </div>
         <div class="modal-actions"><button class="btn-secondary" onclick="aCloseModal()">Zur&uuml;ck zum Antrag</button><button class="btn-primary">Termin vereinbaren</button></div>
       </div>
@@ -285,7 +314,15 @@ body{font-family:"Source Sans 3",sans-serif;background:#fafafb;color:#0b0f0f;min
         <div class="card-sidebar"><h2>Steuerliche Informationen</h2></div>
         <div class="card-content">
           <div class="error-banner hidden" id="b1-banner">
-            <div class="banner-top"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg><div class="banner-texts"><div class="banner-title">Bitte &uuml;berpr&uuml;fe deine Eingaben</div><div class="banner-body"><a onclick="document.getElementById('b1-us-anchor').scrollIntoView({behavior:'smooth'})">Spezifizierte US-Person:</a> Bitte best&auml;tige, dass du keine spezifizierte US-Person bist.</div></div><button class="banner-close" onclick="document.getElementById('b1-banner').classList.add('hidden')"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M13.5 4.5l-9 9M4.5 4.5l9 9" stroke="#410002" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
+            <div class="banner-top">
+              <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg>
+              <div class="banner-texts">
+                <div class="banner-title">Bitte &uuml;berpr&uuml;fe deine Eingaben</div>
+                <div class="banner-body hidden" id="b1-banner-de-line"><a onclick="document.getElementById('b1-us-anchor').scrollIntoView({behavior:'smooth'})">Steuerliche Ans&auml;ssigkeit:</a> Bitte best&auml;tige, dass du ausschlie&szlig;lich in Deutschland steuerlich ans&auml;ssig bist.</div>
+                <div class="banner-body hidden" id="b1-banner-us-line"><a onclick="document.getElementById('b1-us-anchor').scrollIntoView({behavior:'smooth'})">Spezifizierte US-Person:</a> Bitte best&auml;tige, dass du keine spezifizierte US-Person bist.</div>
+              </div>
+              <button class="banner-close" onclick="document.getElementById('b1-banner').classList.add('hidden')"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M13.5 4.5l-9 9M4.5 4.5l9 9" stroke="#410002" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+            </div>
             <div class="banner-actions"><button class="banner-btn" onclick="document.getElementById('b1-us-anchor').scrollIntoView({behavior:'smooth'})">Direkt zum Fehler</button></div>
           </div>
           <div class="form-section">
@@ -294,7 +331,8 @@ body{font-family:"Source Sans 3",sans-serif;background:#fafafb;color:#0b0f0f;min
           </div>
           <div class="form-section" id="b1-us-anchor">
             <div class="form-label">Steuerliche Ans&auml;ssigkeit</div>
-            <div class="cb-row" onclick="toggleCb('b1-cb-de')"><div class="cb-box"><div class="cb-inner checked" id="b1-cb-de"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div></div><span class="cb-text">Ich best&auml;tige, dass ich <span class="link">ausschlie&szlig;lich in Deutschland</span> steuerlich ans&auml;ssig bin.</span></div>
+            <div class="cb-row" onclick="toggleCb('b1-cb-de'); b1Update()"><div class="cb-box"><div class="cb-inner checked" id="b1-cb-de"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div></div><span class="cb-text">Ich best&auml;tige, dass ich <span class="link">ausschlie&szlig;lich in Deutschland</span> steuerlich ans&auml;ssig bin.</span></div>
+            <div class="inline-error hidden" id="b1-de-inline-err"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg><span class="inline-error-text">Bitte best&auml;tige, dass du ausschlie&szlig;lich in Deutschland steuerlich ans&auml;ssig bist.</span></div>
             <div class="cb-row" onclick="toggleCb('b1-cb-us'); b1Update()"><div class="cb-box"><div class="cb-inner" id="b1-cb-us"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div></div><span class="cb-text">Ich best&auml;tige, dass ich <span class="link">keine spezifizierte US-Person</span> bin (z.B. durch Aufenthalt, Wohnsitz, Geburt in den USA, Greencard).</span></div>
             <div class="inline-error hidden" id="b1-inline-err"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg><span class="inline-error-text">Bitte best&auml;tige, dass du keine spezifizierte US-Person bist.</span></div>
             <div class="inline-notification hidden" id="b1-notif">
@@ -329,7 +367,15 @@ body{font-family:"Source Sans 3",sans-serif;background:#fafafb;color:#0b0f0f;min
         <div class="card-sidebar"><h2>Steuerliche Informationen</h2></div>
         <div class="card-content">
           <div class="error-banner hidden" id="b2-banner">
-            <div class="banner-top"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg><div class="banner-texts"><div class="banner-title">Bitte &uuml;berpr&uuml;fe deine Eingaben</div><div class="banner-body"><a onclick="document.getElementById('b2-us-anchor').scrollIntoView({behavior:'smooth'})">Spezifizierte US-Person:</a> Bitte best&auml;tige, dass du keine spezifizierte US-Person bist.</div></div><button class="banner-close" onclick="document.getElementById('b2-banner').classList.add('hidden')"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M13.5 4.5l-9 9M4.5 4.5l9 9" stroke="#410002" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
+            <div class="banner-top">
+              <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg>
+              <div class="banner-texts">
+                <div class="banner-title">Bitte &uuml;berpr&uuml;fe deine Eingaben</div>
+                <div class="banner-body hidden" id="b2-banner-de-line"><a onclick="document.getElementById('b2-us-anchor').scrollIntoView({behavior:'smooth'})">Steuerliche Ans&auml;ssigkeit:</a> Bitte best&auml;tige, dass du ausschlie&szlig;lich in Deutschland steuerlich ans&auml;ssig bist.</div>
+                <div class="banner-body hidden" id="b2-banner-us-line"><a onclick="document.getElementById('b2-us-anchor').scrollIntoView({behavior:'smooth'})">Spezifizierte US-Person:</a> Bitte best&auml;tige, dass du keine spezifizierte US-Person bist.</div>
+              </div>
+              <button class="banner-close" onclick="document.getElementById('b2-banner').classList.add('hidden')"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M13.5 4.5l-9 9M4.5 4.5l9 9" stroke="#410002" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+            </div>
             <div class="banner-actions"><button class="banner-btn" onclick="document.getElementById('b2-us-anchor').scrollIntoView({behavior:'smooth'})">Direkt zum Fehler</button></div>
           </div>
           <div class="form-section">
@@ -338,7 +384,8 @@ body{font-family:"Source Sans 3",sans-serif;background:#fafafb;color:#0b0f0f;min
           </div>
           <div class="form-section" id="b2-us-anchor">
             <div class="form-label">Steuerliche Ans&auml;ssigkeit</div>
-            <div class="cb-row" onclick="toggleCb('b2-cb-de')"><div class="cb-box"><div class="cb-inner checked" id="b2-cb-de"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div></div><span class="cb-text">Ich best&auml;tige, dass ich <span class="link">ausschlie&szlig;lich in Deutschland</span> steuerlich ans&auml;ssig bin.</span></div>
+            <div class="cb-row" onclick="toggleCb('b2-cb-de'); b2Update()"><div class="cb-box"><div class="cb-inner checked" id="b2-cb-de"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div></div><span class="cb-text">Ich best&auml;tige, dass ich <span class="link">ausschlie&szlig;lich in Deutschland</span> steuerlich ans&auml;ssig bin.</span></div>
+            <div class="inline-error hidden" id="b2-de-inline-err"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg><span class="inline-error-text">Bitte best&auml;tige, dass du ausschlie&szlig;lich in Deutschland steuerlich ans&auml;ssig bist. Trifft dies nicht auf dich zu, helfen wir dir gern in einem Beratungsgespr&auml;ch weiter: <a href="#" style="color:#c32e23;font-weight:600;text-decoration:underline">Zur Terminvereinbarung</a></span></div>
             <div class="cb-row" onclick="toggleCb('b2-cb-us'); b2Update()"><div class="cb-box"><div class="cb-inner" id="b2-cb-us"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div></div><span class="cb-text">Ich best&auml;tige, dass ich <span class="link">keine spezifizierte US-Person</span> bin (z.B. durch Aufenthalt, Wohnsitz, Geburt in den USA, Greencard).</span></div>
             <div class="inline-error hidden" id="b2-inline-err"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg><span class="inline-error-text">Bitte best&auml;tige, dass du keine spezifizierte US-Person bist. Trifft dies nicht auf dich zu, helfen wir dir gern in einem Beratungsgespr&auml;ch weiter: <a href="#" style="color:#c32e23;font-weight:600;text-decoration:underline">Zur Terminvereinbarung</a></span></div>
           </div>
@@ -384,6 +431,7 @@ body{font-family:"Source Sans 3",sans-serif;background:#fafafb;color:#0b0f0f;min
               <div class="yn-opt" onclick="cSetYN('de','ja')"><div class="yn-cb checked" id="c-de-ja"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div><span class="yn-opt-label">Ja</span></div>
               <div class="yn-opt" onclick="cSetYN('de','nein')"><div class="yn-cb" id="c-de-nein"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.5 2.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div><span class="yn-opt-label">Nein</span></div>
             </div>
+            <div class="inline-error hidden" id="c-de-inline-err"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="12" cy="12" r="10" stroke="#c32e23" stroke-width="1.5" fill="none"/><path d="M12 7v6" stroke="#c32e23" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#c32e23"/></svg><span class="inline-error-text">Bitte best&auml;tige, dass du ausschlie&szlig;lich in Deutschland steuerlich ans&auml;ssig bist.</span></div>
           </div>
           <!-- US-Bezug -->
           <div class="yn-section" id="c-us-anchor">
@@ -438,10 +486,7 @@ function setError(id, on) {
 }
 function show(id) { document.getElementById(id).classList.remove('hidden'); }
 function hide(id) { document.getElementById(id).classList.add('hidden'); }
-function setBlur(id, on) {
-  const el = document.getElementById(id);
-  if (on) el.classList.add('blurred'); else el.classList.remove('blurred');
-}
+function setVis(id, visible) { visible ? show(id) : hide(id); }
 
 // ─── LANDING ───
 function startVariant(id) {
@@ -453,7 +498,6 @@ function startVariant(id) {
   show('var-'+id);
   const names = {aktuell:'Aktueller Konzeptstand',a:'Variante A – Modal',b1:'Variante B1 – Inline-Notification',b2:'Variante B2 – Inline-Notification',c:'Variante C – Ja/Nein-Auswahl'};
   document.getElementById('step-indicator').textContent = names[id];
-  // reset state
   resetVariant(id);
 }
 function goHome() {
@@ -464,23 +508,24 @@ function resetVariant(id) {
     document.getElementById('aktuell-cb-wi').className = 'cb-inner checked';
     document.getElementById('aktuell-cb-de').className = 'cb-inner checked';
     document.getElementById('aktuell-cb-us').className = 'cb-inner';
-    hide('aktuell-banner'); hide('aktuell-inline-err');
+    hide('aktuell-banner'); hide('aktuell-de-inline-err'); hide('aktuell-inline-err');
   } else if (id === 'a') {
     document.getElementById('a-cb-wi').className = 'cb-inner checked';
     document.getElementById('a-cb-de').className = 'cb-inner checked';
     document.getElementById('a-cb-us').className = 'cb-inner';
-    hide('a-banner'); hide('a-inline-err'); hide('a-modal');
+    hide('a-banner'); hide('a-de-inline-err'); hide('a-inline-err');
+    ['a-modal-de','a-modal-us','a-modal-both'].forEach(hide);
     document.getElementById('a-main').classList.remove('blurred');
   } else if (id === 'b1') {
     document.getElementById('b1-cb-wi').className = 'cb-inner checked';
     document.getElementById('b1-cb-de').className = 'cb-inner checked';
     document.getElementById('b1-cb-us').className = 'cb-inner';
-    hide('b1-banner'); hide('b1-inline-err'); hide('b1-notif');
+    hide('b1-banner'); hide('b1-de-inline-err'); hide('b1-inline-err'); hide('b1-notif');
   } else if (id === 'b2') {
     document.getElementById('b2-cb-wi').className = 'cb-inner checked';
     document.getElementById('b2-cb-de').className = 'cb-inner checked';
     document.getElementById('b2-cb-us').className = 'cb-inner';
-    hide('b2-banner'); hide('b2-inline-err');
+    hide('b2-banner'); hide('b2-de-inline-err'); hide('b2-inline-err');
   } else if (id === 'c') {
     cState = {wi:null, de:null, us:null};
     ['wi','de','us'].forEach(k => {
@@ -490,87 +535,88 @@ function resetVariant(id) {
     document.getElementById('c-wi-ja').className = 'yn-cb checked';
     document.getElementById('c-de-ja').className = 'yn-cb checked';
     cState.wi = 'ja'; cState.de = 'ja';
-    hide('c-inline-err'); hide('c-modal');
+    hide('c-de-inline-err'); hide('c-inline-err'); hide('c-modal');
     document.getElementById('c-main').classList.remove('blurred');
-    ['c-us-ja','c-us-nein'].forEach(id => document.getElementById(id).classList.remove('error'));
+    ['c-us-ja','c-us-nein','c-de-ja','c-de-nein'].forEach(id => document.getElementById(id).classList.remove('error'));
+  }
+}
+
+// ─── shared validation for checkbox variants ───
+function cbValidate(v, anchor, extraOnError) {
+  const deErr = !isChecked(v+'-cb-de');
+  const usErr = !isChecked(v+'-cb-us');
+  if (deErr || usErr) {
+    setVis(v+'-banner-de-line', deErr);
+    setVis(v+'-banner-us-line', usErr);
+    show(v+'-banner');
+    setVis(v+'-de-inline-err', deErr); setError(v+'-cb-de', deErr);
+    setVis(v+'-inline-err', usErr);    setError(v+'-cb-us', usErr);
+    document.getElementById(anchor).scrollIntoView({behavior:'smooth'});
+    if (extraOnError) extraOnError(usErr);
+    return false;
+  }
+  return true;
+}
+function cbUpdate(v) {
+  if (isChecked(v+'-cb-de')) { setError(v+'-cb-de', false); hide(v+'-de-inline-err'); }
+  if (isChecked(v+'-cb-us')) { setError(v+'-cb-us', false); hide(v+'-inline-err'); }
+  if (isChecked(v+'-cb-de') && isChecked(v+'-cb-us')) {
+    hide(v+'-banner');
+    hide(v+'-banner-de-line'); hide(v+'-banner-us-line');
+  } else {
+    setVis(v+'-banner-de-line', !isChecked(v+'-cb-de'));
+    setVis(v+'-banner-us-line', !isChecked(v+'-cb-us'));
   }
 }
 
 // ─── AKTUELL ───
-function aktuellUpdate() {
-  if (isChecked('aktuell-cb-us')) {
-    setError('aktuell-cb-us', false);
-    hide('aktuell-inline-err');
-  }
-}
+function aktuellUpdate() { cbUpdate('aktuell'); }
 function aktuellWeiter() {
-  if (!isChecked('aktuell-cb-us')) {
-    show('aktuell-banner'); show('aktuell-inline-err');
-    setError('aktuell-cb-us', true);
-    document.getElementById('aktuell-us-anchor').scrollIntoView({behavior:'smooth'});
-  } else {
-    hide('aktuell-banner'); hide('aktuell-inline-err');
+  if (cbValidate('aktuell', 'aktuell-us-anchor')) {
+    hide('aktuell-banner');
     alert('Formular erfolgreich abgeschickt! (Weiter zum nächsten Schritt)');
   }
 }
 
 // ─── VARIANTE A ───
-function aUpdate() {
-  if (isChecked('a-cb-us')) {
-    setError('a-cb-us', false);
-    hide('a-inline-err');
-    // keep banner visible until manually closed
-  }
-}
+function aUpdate() { cbUpdate('a'); }
 function aWeiter() {
-  if (!isChecked('a-cb-us')) {
-    show('a-banner'); show('a-modal');
-    setError('a-cb-us', true);
+  const deErr = !isChecked('a-cb-de');
+  const usErr = !isChecked('a-cb-us');
+  if (deErr || usErr) {
+    setVis('a-banner-de-line', deErr);
+    setVis('a-banner-us-line', usErr);
+    show('a-banner');
+    setVis('a-de-inline-err', deErr); setError('a-cb-de', deErr);
+    setVis('a-inline-err', usErr);    setError('a-cb-us', usErr);
+    const modalId = deErr && usErr ? 'a-modal-both' : deErr ? 'a-modal-de' : 'a-modal-us';
+    show(modalId);
     document.getElementById('a-main').classList.add('blurred');
   } else {
-    hide('a-banner'); hide('a-inline-err');
+    hide('a-banner');
     alert('Formular erfolgreich abgeschickt!');
   }
 }
 function aCloseModal() {
-  hide('a-modal');
+  ['a-modal-de','a-modal-us','a-modal-both'].forEach(hide);
   document.getElementById('a-main').classList.remove('blurred');
-  show('a-inline-err');
   document.getElementById('a-us-anchor').scrollIntoView({behavior:'smooth'});
 }
 
 // ─── VARIANTE B1 ───
-function b1Update() {
-  if (isChecked('b1-cb-us')) {
-    setError('b1-cb-us', false);
-    hide('b1-inline-err'); hide('b1-notif');
-  }
-}
+function b1Update() { cbUpdate('b1'); if (isChecked('b1-cb-us')) hide('b1-notif'); }
 function b1Weiter() {
-  if (!isChecked('b1-cb-us')) {
-    show('b1-banner'); show('b1-inline-err'); show('b1-notif');
-    setError('b1-cb-us', true);
-    document.getElementById('b1-us-anchor').scrollIntoView({behavior:'smooth'});
-  } else {
-    hide('b1-banner'); hide('b1-inline-err'); hide('b1-notif');
+  if (cbValidate('b1', 'b1-us-anchor', (usErr) => { if (usErr) show('b1-notif'); })) {
+    hide('b1-banner'); hide('b1-notif');
     alert('Formular erfolgreich abgeschickt!');
   }
 }
 
 // ─── VARIANTE B2 ───
-function b2Update() {
-  if (isChecked('b2-cb-us')) {
-    setError('b2-cb-us', false);
-    hide('b2-inline-err');
-  }
-}
+function b2Update() { cbUpdate('b2'); }
 function b2Weiter() {
-  if (!isChecked('b2-cb-us')) {
-    show('b2-banner'); show('b2-inline-err');
-    setError('b2-cb-us', true);
-    document.getElementById('b2-us-anchor').scrollIntoView({behavior:'smooth'});
-  } else {
-    hide('b2-banner'); hide('b2-inline-err');
+  if (cbValidate('b2', 'b2-us-anchor')) {
+    hide('b2-banner');
     alert('Formular erfolgreich abgeschickt!');
   }
 }
@@ -584,6 +630,7 @@ function cSetYN(field, val) {
     el.classList.toggle('checked', v === val);
     el.classList.remove('error');
   });
+  if (field === 'de') { hide('c-de-inline-err'); }
   if (field === 'us') {
     hide('c-inline-err');
     ['c-us-ja','c-us-nein'].forEach(id => document.getElementById(id).classList.remove('error'));
@@ -597,15 +644,21 @@ function cCloseModal() {
   document.getElementById('c-us-anchor').scrollIntoView({behavior:'smooth'});
 }
 function cWeiter() {
-  if (cState.us === 'nein') {
-    show('c-modal');
-    document.getElementById('c-main').classList.add('blurred');
-  } else if (!cState.us) {
-    show('c-inline-err');
-    ['c-us-ja','c-us-nein'].forEach(id => document.getElementById(id).classList.add('error'));
-    document.getElementById('c-us-anchor').scrollIntoView({behavior:'smooth'});
+  const deErr = cState.de === 'nein' || !cState.de;
+  const usErr = cState.us === 'nein' || !cState.us;
+  if (deErr || usErr) {
+    setVis('c-de-inline-err', deErr);
+    ['c-de-ja','c-de-nein'].forEach(id => { if (deErr) document.getElementById(id).classList.add('error'); });
+    setVis('c-inline-err', usErr);
+    ['c-us-ja','c-us-nein'].forEach(id => { if (usErr) document.getElementById(id).classList.add('error'); });
+    if (usErr && cState.us === 'nein') {
+      show('c-modal');
+      document.getElementById('c-main').classList.add('blurred');
+    } else {
+      document.getElementById('c-us-anchor').scrollIntoView({behavior:'smooth'});
+    }
   } else {
-    hide('c-inline-err');
+    hide('c-inline-err'); hide('c-de-inline-err');
     alert('Formular erfolgreich abgeschickt!');
   }
 }
